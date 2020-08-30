@@ -85,12 +85,13 @@
     .go-icon {
         width: 30px;
         height: 30px;
-        color: rgb(230, 210, 160);
-        margin: 0 -4px 0 6px;
+        color: rgb(250, 230, 150);
+        margin: -2px -4px 0 6px;
     }
 
     .go-icon {
         margin-right: -10px;
+        margin-top: 0;
     }
 
 </style>

@@ -280,7 +280,7 @@ export const ERA_META = (() => {
 export const GOAL_SETS = (() => {
 
     const standard = '<span class="number">5</span> points --  single player<br />' + 
-        '<span class="number">2</span> points -- shared reward';
+        '<span class="number">2</span> points -- shared reward, each player';
 
    return [
         [
@@ -289,6 +289,8 @@ export const GOAL_SETS = (() => {
                 objective: 'First Player with 10 <span class="INDUSTRY">INDUSTRY</span> squares',
                 rewardPoints: standard,
                 rewardEffects: 'Add 2 <span class="CULTURE">CULTURE</span> squares',
+                countTrigger: 10,
+                countType: 'CULTURE',
                 bonusGroup: 'A',
                 code: 'AA'
             },
@@ -297,6 +299,8 @@ export const GOAL_SETS = (() => {
                 objective: 'First Player with 10 <span class="COMMERCE">COMMERCE</span> squares',
                 rewardPoints: standard,
                 rewardEffects: '  Add 2 <span class="PARKS">PARKS</span> squares',
+                countTrigger: 10,
+                countType: 'PARKS',
                 bonusGroup: 'C',
                 code: 'AB'
             },
@@ -305,6 +309,8 @@ export const GOAL_SETS = (() => {
                 objective: 'First Player with 10 <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
                 rewardPoints: standard, 
                 rewardEffects: 'Add 2 <span class="INDUSTRY">INDUSTRY</span> squares',
+                countTrigger: 10,
+                countType: 'INDUSTRY',
                 code: 'AC'
             },
             {
@@ -312,6 +318,8 @@ export const GOAL_SETS = (() => {
                 objective: 'First Player with 10 <span class="PARKS">PARKS</span> squares',
                 rewardPoints: standard,
                 rewardEffects: 'Add 2 <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
+                countTrigger: 10,
+                countType: 'RESIDENTIAL',
                 bonusGroup: 'B',
                 code: 'AD'
             }
@@ -321,12 +329,14 @@ export const GOAL_SETS = (() => {
                 title: 'Downtown Developer',
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Most squares in the Inner District',
                 rewardPoints: standard,
+                turnTrigger: 12,
                 code: 'BA'
             },
             {
                 title: 'Race to the Exurbs',
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Most developed squares on the outer edge of the board',
                 rewardPoints: standard,
+                turnTrigger: 12,
                 bonusGroup: 'C',
                 code: 'BB'
             },
@@ -334,6 +344,7 @@ export const GOAL_SETS = (() => {
                 title: 'Monument Builder',
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Most <span class="PARKS">PARKS</span> on the board',
                 rewardPoints: standard,
+                turnTrigger: 12,
                 bonusGroup: 'B',
                 code: 'BC'
             },
@@ -341,12 +352,14 @@ export const GOAL_SETS = (() => {
                 title: 'Measured Growth',
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Least developed squares on the board',
                 rewardPoints: standard,
+                turnTrigger: 12,
                 code: 'BD'
             },
             {
                 title: 'Retail Entrepreneur',
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Most <span class="COMMERCE">COMMERCE</span> squares touching <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
                 rewardPoints: standard,
+                turnTrigger: 12,
                 bonusGroup: 'C',
                 code: 'BE'
             },
@@ -355,6 +368,7 @@ export const GOAL_SETS = (() => {
                 objective: 'At the end of <span class="round-indicator">12 Turns</span>: <br />Most <span class="INDUSTRY">INDUSTRY</span> squares',
                 rewardPoints: standard,
                 bonusGroup: 'A',
+                turnTrigger: 12,
                 code: 'BF'
             }
         ],
@@ -363,18 +377,21 @@ export const GOAL_SETS = (() => {
                 title: 'The New Economy',
                 objective: 'First to complete your city',
                 rewardEffects: 'Convert up to 4 continguos <span class="INDUSTRY">INDUSTRY</span> to <span class="COMMERCE">COMMERCE</span>',
+                completionTrigger: true,
                 code: 'CA'
             },
             {
                 title: 'Urban Rehab',
                 objective: 'First to complete your city',
                 rewardEffects: 'Convert up to 3 <span class="BLIGHT">BLIGHT</span> to <span class="PARKS">PARKS</span>',
+                completionTrigger: true,
                 expansion: 'BLIGHT',
                 code: 'CB'
             },
             {
                 title: 'Master Planner',
                 objective: 'First to complete your city',
+                completionTrigger: true,
                 rewardPoints: standard,
                 code: 'CC'
             },
@@ -382,6 +399,7 @@ export const GOAL_SETS = (() => {
                 title: 'Rails to Trails',
                 objective: 'First to complete your city',
                 rewardEffects: 'Convert up to 4 contiguous <span class="INDUSTRY">INDUSTRY</span> to <span class="PARKS">PARKS</span>',
+                completionTrigger: true,
                 code: 'CD'
             }
         ],
@@ -390,6 +408,7 @@ export const GOAL_SETS = (() => {
                 title: 'Champs Central',
                 objective: 'At the End, largest cluster of <span class="PARKS">PARKS</span> in the Inner District',
                 rewardPoints: standard,
+                gameEndTrigger: true,
                 bonusGroup: 'B',
                 code: 'DA'
             },
@@ -397,12 +416,14 @@ export const GOAL_SETS = (() => {
                 title: 'Mixed Use Builder',
                 objective: 'At the end of the game',
                 rewardPoints: 'Score one bonus point for each SQUARE of your least populous type',
+                gameEndTrigger: true,
                 code: 'DB'
             },
             {
                 title: 'Global Hub of Finance',
-                objective: 'At the end of the game, largest cluster of <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
+                objective: 'At the end of the game, <br />largest cluster of <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
                 rewardPoints: standard,
+                gameEndTrigger: true,
                 bounsGroup: 'C',
                 code: 'DC'
             },
@@ -411,18 +432,21 @@ export const GOAL_SETS = (() => {
                 title: 'District Developer',
                 objective: 'At the end of the game',
                 rewardPoints: 'score one bonus point for each CLUSTER of your least populous type of cluster',
+                gameEndTrigger: true,
                 code: 'DD'
             },
             {
                 title: 'Suburban LifeStyle Dream',
-                objective: 'At the end of the game, Most <span class="RESIDENTIAL">RESIDENTIAL</span> squares on the outer edge',
+                objective: 'At the end of the game, <br />Most <span class="RESIDENTIAL">RESIDENTIAL</span> squares on the outer edge',
                 rewardPoints: standard,
+                gameEndTrigger: true,
                 code: 'DE'
             },
             {
                 title: 'Culture for the Masses',
-                objective: 'At the end of the game, Most <span class="CULTURE">CULTURE</span> outside the Inner District',
+                objective: 'At the end of the game, <br />Most <span class="CULTURE">CULTURE</span> outside the Inner District',
                 rewardPoints: standard,
+                gameEndTrigger: true,
                 code: 'DF'
             }
         ]
