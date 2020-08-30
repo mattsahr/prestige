@@ -228,6 +228,9 @@
     import Dice from './Dice.svelte';
 
     export let dashboardState = { open: false };
+    const DOM = {
+        wrapper: null
+    };
 
     const toggleDashboard = () => {
         dashboardState.open = !dashboardState.open;
@@ -262,7 +265,93 @@
             ? ''
             : currentView.dice[type];
 
-    const createLoggers = () => {
+    const createTooltipContent = htmlContent => { 
+        const el = document.createElement('div');
+        el.classList.add('tooltip-inner-content');
+        el.innerHTML = htmlContent;
+        return el;
+    };
+
+    const animatePhase3 = (() => {
+        const phase3 = () => {
+            DOM.wrapper.removeAttribute('style');
+        };
+        return () => { setTimeout(phase3, 500); };
+    })();
+
+
+
+    const animatePhase2 = (() => {
+        const phase2 = () => {
+            DOM.wrapper.style.transition = 'transform 500ms ease-out, height 400ms';
+            DOM.wrapper.style.transform = 'scale(1)';
+
+            DOM.turnNumber.style.transition = 'transform 1800ms ease-out';
+            DOM.turnNumber.style.transform = 'scale(1)';
+
+            animatePhase3();
+        };
+        return () => { setTimeout(phase2, 100); };
+    })();
+
+    const animateNewTurn = (() => {
+        let turnCount = 0;
+        const animate = () => {
+            if (DOM.wrapper.classList.contains('open')) {
+                return;
+            }
+
+            if (!DOM.turnNumber) { 
+                DOM.turnNumber = DOM.wrapper.querySelector('.turn-number');
+            }
+
+            if (localTurns.length > turnCount) {
+                turnCount =localTurns.length;
+                console.log('animate in!', currentIndex, turnCount);
+
+                DOM.wrapper.removeAttribute('style');
+                DOM.wrapper.style.transform = 'scale(1.2)';
+                DOM.wrapper.style.transition = 'transform 100ms, height 400ms';
+
+                DOM.turnNumber.removeAttribute('style');
+                DOM.turnNumber.style.transition = 'transform 100ms';
+                DOM.turnNumber.style.transform = 'scale(3)';
+
+                console.log('DOM.wrapper', DOM.wrapper);
+                 animatePhase2();
+            }
+        };
+        return () => { setTimeout(animate, 10); };
+    })();
+
+    const fadeIn = (node, {duration = 300}) => {
+        console.log('fadeIn!', currentIndex);
+        animateNewTurn();
+        return {
+            duration,
+            tick: t => { 
+                if (t === 1) {
+                    node.removeAttribute('style');
+                } else {
+                    node.style.opacity = t; 
+                }
+            }
+        };
+    };
+
+   const createTooltip = description => ({
+        content: ' ',
+        placement: 'top',
+        trigger: 'click',
+        onShow: instance => {
+            instance.setProps({content: createTooltipContent(description)});
+        },
+        delay: [0, 200],
+        theme: 'light',
+        animation: 'shift-away'
+    });
+
+    const init = () => {
         if (window) {
             window.I =  window.I || {};
             window.I.turns = () => {
@@ -271,33 +360,17 @@
                 console.log('  TURNS currentView', currentView);
             };
         }
+        if (DOM.wrapper) { 
+            DOM.turnNumber = DOM.wrapper.querySelector('.turn-number');
+        }
     };
 
-    const createTooltipContent = htmlContent => { 
-        const el = document.createElement('div');
-        el.classList.add('tooltip-inner-content');
-        el.innerHTML = htmlContent;
-        return el;
-    };
-
-   const createTooltip = description => ({
-        content: ' ',
-        placement: "bottom",
-        onShow: instance => {
-            instance.setProps({content: createTooltipContent(description)});
-        },
-        delay: [600, 200],
-        theme: 'light',
-        animation: 'shift-away'
-    });
-
-
-    onMount(createLoggers);    
+    onMount(init);
 
 </script>
 
 {#if $rosterName}
-    <div class={dasboardClass} in:fade out:fade>
+    <div class={dasboardClass} in:fade out:fade bind:this={DOM.wrapper}>
         <div class="column">
 
             <div class="meta-controls">
@@ -340,7 +413,7 @@
 
             <div class="main-info">
                 {#each [currentIndex] as count (currentIndex)}
-                    <div class="era" in:fade="{{ delay: 300, duration: 1200 }}"  out:fade>
+                    <div class="era" in:fadeIn="{{ delay: 300, duration: 1200 }}"  out:fade>
                         <div class="title">
                             {currentView.era}
                         </div>

@@ -146,7 +146,7 @@
 */    }
 
     .minified .main {
-        height: 32px;
+        height: 34px;
         margin: 0;
         padding: 4px 0 0 2px;
         border-radius: 0;

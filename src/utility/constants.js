@@ -154,7 +154,7 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'The people who live in a golden age usually go around complaining how yellow everything looks.',
-            description: 'Add one square of Each Type.'
+            description: 'Add one square of each Type.'
         },
         {
             era_id: 'AG',
@@ -168,7 +168,7 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'Before there were “selfies,” there was Me.',
-            description: 'Any two contiguus of one color.'
+            description: 'Any two contiguous squares of one color.'
         },
         {
             era_id: 'AH',
