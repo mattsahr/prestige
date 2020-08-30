@@ -86,7 +86,7 @@
 {/if}
 
 {#if chooseGoals}
-    <Modal on:close={handleCloseGoalChooser}>
+    <Modal>
         <GoalPanel modal={true} handleCloseGoalChooser={handleCloseGoalChooser} />
     </Modal>
 {/if}

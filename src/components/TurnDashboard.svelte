@@ -99,6 +99,23 @@
         opacity: 1;
     }
 
+    .title {
+        display: flex;
+    }
+
+    .info-bug {
+        height: 34px;
+        width: 34px;
+        color: rgb(30, 90, 130);
+        padding: 8px;
+        margin: -6px 0 -6px 0;
+        cursor: pointer;
+    }
+
+    .info-bug:hover {
+        color: rgb(90, 230, 255);
+    }
+
     .icon {
         color: rgb(230, 230, 230);
         font-size: 12px;
@@ -131,14 +148,17 @@
         color: rgb(230, 230, 230);
     }
 
-    .info-bug {
+    .turn-tracker {
         color: rgb(230, 180, 0);
         text-transform: uppercase;
         user-select: none;
+        display: flex;
+        align-items: center;
+        margin: -8px 0 0 0;
     }
 
     .turn-label {
-        margin: 0 2px 0 12px;
+        margin: 0 6px 0 12px;
         opacity: 0.5;
         font-size: 0.8em;
         color: rgb(220, 220, 220);
@@ -195,17 +215,17 @@
 </style>
 
 <script>
-
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
+    import tippy from "sveltejs-tippy";
     import MdChevronLeft from 'svelte-icons/md/MdChevronLeft.svelte';
     import MdChevronRight from 'svelte-icons/md/MdChevronRight.svelte';
     import MdExpandMore from 'svelte-icons/md/MdExpandMore.svelte';
     import MdExpandLess from 'svelte-icons/md/MdExpandLess.svelte';
-    //  Svelte Icons   https://svelte-icons-c9wy0on62.now.sh/
+    import MdInfo from 'svelte-icons/md/MdInfo.svelte';
+    import { hydrateTurns, dummyTurn } from '../utility/helpers';
     import { turns, rosterName } from '../store/store';
     import Dice from './Dice.svelte';
-    import { dummyTurns } from '../utility/testData';
 
     export let dashboardState = { open: false };
 
@@ -222,8 +242,8 @@
     const goForward = () => currentIndex = currentIndex >=  localTurns.length - 1 
         ? localTurns.length - 1 : currentIndex + 1;
 
-    $: localTurns = $turns || dummyTurns;
-    $: currentIndex = localTurns.length -1;
+    $: localTurns = $turns ? hydrateTurns($turns.played) : dummyTurn;
+    $: currentIndex = localTurns.length - 1;
     $: currentView = localTurns[currentIndex];
     $: goBackIconClass = 'icon' + (currentIndex < 1 ? ' disabled' : '');
     $: goForwardIconClass = 'icon' + (currentIndex >= (localTurns.length - 1) ? ' disabled' : '');
@@ -253,6 +273,25 @@
         }
     };
 
+    const createTooltipContent = htmlContent => { 
+        const el = document.createElement('div');
+        el.classList.add('tooltip-inner-content');
+        el.innerHTML = htmlContent;
+        return el;
+    };
+
+   const createTooltip = description => ({
+        content: ' ',
+        placement: "bottom",
+        onShow: instance => {
+            instance.setProps({content: createTooltipContent(description)});
+        },
+        delay: [600, 200],
+        theme: 'light',
+        animation: 'shift-away'
+    });
+
+
     onMount(createLoggers);    
 
 </script>
@@ -269,11 +308,16 @@
                         {#if dashboardState.open}<MdExpandLess />{:else}<MdExpandMore />{/if}
                     </div>
 
-                    <div class="info-bug">
-                        <span class="round-label">Round</span> 
-                        <span class="round-number">{currentView.round}</span>
+                    <div class="turn-tracker">
                         <span class="turn-label">Turn</span> 
                         <span class="turn-number">{currentView.turn}</span> 
+
+                        {#each [currentIndex] as count (currentIndex)}
+                            <div class="info-bug" use:tippy={createTooltip(currentView.description)} >
+                                <MdInfo />
+                            </div>
+                        {/each}
+
                     </div>
 
                     <div class="roll-mini-summary">
@@ -296,13 +340,14 @@
 
             <div class="main-info">
                 {#each [currentIndex] as count (currentIndex)}
-                <div class="era" in:fade="{{ delay: 300, duration: 1200 }}"  out:fade>
-                    <div class="title">{currentView.era}</div>
-                </div>
-
-                <div class="comment" in:fade="{{ delay: 300, duration: 1200 }}" out:fade>
-                    {@html currentView.comment}
-                </div>
+                    <div class="era" in:fade="{{ delay: 300, duration: 1200 }}"  out:fade>
+                        <div class="title">
+                            {currentView.era}
+                        </div>
+                    </div>
+                    <div class="comment" in:fade="{{ delay: 300, duration: 1200 }}" out:fade>
+                        {@html currentView.comment}
+                    </div>
                 {/each}
             </div>
 

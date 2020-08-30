@@ -125,6 +125,38 @@ button.small-button {
     }
 }
 
+.main-info .comment, 
+.tooltip-inner-content {
+    .COMMERCE, .CULTURE, .INDUSTRY, .PARKS, .RESIDENTIAL {
+        border-radius: 2px;
+        padding: 2px 4px;
+        margin: -2px 2px 0 2px;
+        display: inline-block;
+        border: solid 1px;
+        line-height: 1.2;
+    }
+
+    .COMMERCE { 
+        background-color: transparentize($color-COMMERCE, 0.7); 
+        border-color: $color-COMMERCE;
+    } 
+    .CULTURE { 
+        background-color: transparentize($color-CULTURE, 0.7); 
+        border-color: $color-CULTURE;
+    } 
+    .INDUSTRY { background-color: transparentize($color-INDUSTRY, 0.7); 
+        border-color: $color-INDUSTRY;
+    } 
+    .PARKS { 
+        background-color: transparentize($color-PARKS, 0.7); 
+        border-color: $color-PARKS;
+    } 
+    .RESIDENTIAL { 
+        background-color: transparentize($color-RESIDENTIAL, 0.7); 
+        border-color: $color-RESIDENTIAL;
+    }
+}
+
 .goal-panel .goals-section {
 
     .round-indicator {

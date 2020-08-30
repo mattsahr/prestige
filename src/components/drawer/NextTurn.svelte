@@ -27,6 +27,15 @@
         flex: 1;
         line-height: 24px
     }
+
+    .tagline {
+        font-size: 0.85em;
+        letter-spacing: 0.04em;
+        font-style: italic;
+        margin: 0 0 0 14px;
+        color: rgb(220, 120, 0);
+    }
+
     .next-icon {
         position: relative;
         color: rgb(240, 220, 0);
@@ -43,21 +52,29 @@
         color: rgb(246, 140, 0);
     }
 
+    .drawer-button:hover .tagline {
+        color: rgb(255, 100, 0);
+    }
+
 </style>
 
 <script>
+    import { gStore } from '../../store/store';
     import MdMore from 'svelte-icons/md/MdMore.svelte';
 
     export let handleDrawerClose = () => false;
 
     const handleNextClick = () => {
         console.log('NEXT CLICK!');
+        gStore.roster.advanceTurn();
+        handleDrawerClose();
     };
+
 </script>
 
 
 <div class="drawer-button" on:click={handleNextClick}>
-    <div class="title">Next Turn</div>
+    <div class="title">Next Turn <span class="tagline">roll the dice!</span></div>
     <div class="next-icon">
         <MdMore />
     </div>

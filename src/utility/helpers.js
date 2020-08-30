@@ -3,10 +3,13 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { 
     DEFAULT_CITY_NAME,
     DEFAULT_PLAYER_NAME,
+    DICE_ORDER,
     DUMMY_CHAR, 
     DUMMY_ID, 
+    ERA_META,
     GOAL_SETS,
-    PLOT_TYPE, 
+    PLOT_TYPE,
+    PRE_GAME_ZERO_ERA, 
     SHORT_TYPES, 
     SPACER, 
     STARTING_SCORE 
@@ -155,6 +158,10 @@ export const initHelpers = (sourceFB, sourceGlobalData) => {
 
 
 export  const sortBoards = scores => (A, B) => {
+    if (!A || !B || !A._id || !B._id || !scores[A._id] || !scores[B._id]) {
+        return 0;
+    } 
+
     if (scores[A._id].total <  scores[B._id].total)  {
         return -1;
     }
@@ -175,6 +182,137 @@ const randomInt = (min, max) => {
     const Max = Math.floor(max); 
     return Math.floor(Math.random() * (Max - Min + 1)) + Min; 
 };
+
+export const dummyTurn = [
+    {
+        ...ERA_META[0],
+        dice: { COMMERCE: 2, CULTURE: 4, INDUSTRY: 5, PARKS: 1, RESIDENTIAL: 3 }
+    }
+];
+
+export const hydrateTurns = (() => {
+
+    const hydrateTurn = (turnString, index) => {
+        const [ era_id, rollString ] = turnString.split(SPACER);
+        const era = ERA_META.find(next => next.era_id === era_id);
+
+        const hydrated = { 
+            ..._cloneDeep(era),
+            turn: index,
+            dice: {}
+        };
+        const rolls = rollString.split('');
+
+        for (let i = 0; i < rolls.length; i++) {
+            hydrated.dice[DICE_ORDER[i]] = Number(rolls[i]);
+        }
+
+        return hydrated;
+    };
+
+    return turnOrder => {
+        const turns = turnOrder.played || turnOrder;
+
+        return turns.map(hydrateTurn);
+    };
+})();
+
+export const updateTurns = (() => {
+
+    const preGameTurnZero = ERA_META[0].era_id + SPACER + '24513';
+
+    const rollDice = era_id => {
+        const { rules } = ERA_META.find(era => era.era_id === era_id);
+
+        let turn = era_id + SPACER;
+        for (let i = 0; i < 5; i++) {
+            const { min, max, exact } = rules[DICE_ORDER[i]];
+            if (exact) {
+                turn += exact;
+            } else {
+                turn += randomInt(
+                    (min || 1), 
+                    (max || 6)
+                );
+            }
+        }
+        return turn;
+    };
+
+    function realShuffle(array) {
+        // SOURCE https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array#6274398
+
+        let counter = array.length;
+
+        // While there are elements in the array
+        while (counter > 0) {
+            // Pick a random index
+            let index = Math.floor(Math.random() * counter);
+
+            // Decrease counter by 1
+            counter--;
+
+            // And swap the last element with it
+            let temp = array[counter];
+            array[counter] = array[index];
+            array[index] = temp;
+        }
+
+        return array;
+    }
+
+    const shuffle = (currentTurns = {}) => {
+
+        const played = currentTurns.played || [ preGameTurnZero ];
+        const sideboard = currentTurns.sideboard || [];
+        const oldDeck = currentTurns.deck || [];
+
+        const newDeck = [ ...oldDeck, ...sideboard ];
+
+        const sourceEras = ERA_META
+            .map(era => era.era_id)
+            .filter(era_id => era_id !== PRE_GAME_ZERO_ERA)
+            .filter(era_id => newDeck.indexOf(era_id) === -1);
+            
+        while (newDeck.length < 12) {
+            const nextIndex = randomInt(0, sourceEras.length - 1);
+            const era_id = sourceEras.splice(nextIndex, 1)[0];
+            newDeck.push(era_id);
+        }
+
+        realShuffle(newDeck);
+
+        return {
+            played,
+            sideboard: sourceEras,
+            deck: newDeck
+        };
+    };
+
+    const advance = currentTurns => {
+        if (!currentTurns) {
+            return shuffle();
+        }
+
+        const { deck, played, sideboard } = currentTurns.deck.length === 0
+            ? shuffle(currentTurns)
+            : _cloneDeep(currentTurns);
+
+        const nextIndex = randomInt(0, deck.length -1);
+        const nextEraId = deck.splice(nextIndex, 1)[0];
+
+        const nextTurn = rollDice(nextEraId);
+        played.push(nextTurn);
+
+        return {
+            deck,
+            played,
+            sideboard 
+        };
+    };
+
+    return advance;
+})(); 
   
 
 export const serializeGoals = goals => 

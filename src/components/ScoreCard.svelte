@@ -94,7 +94,7 @@
     import { onMount } from 'svelte';
     import { gStore, modalUX } from '../store/store.js';
     import { shouldScore } from '../utility/scores.js';
-    import { getRandomGoals, hydrateGoals } from '../utility/helpers';
+    import { getRandomGoals, hydrateGoals, updateTurns, hydrateTurns } from '../utility/helpers';
     import tippy from "sveltejs-tippy";
 
     const tippyProps = {
@@ -137,10 +137,6 @@
                 console.log('------- GSTORE ---------');
                 console.log($gStore); 
                 console.log('    ');
-                if (window.I.turns) {
-                    console.log('----- TURNS -------');
-                    window.I.turns();
-                }
                 if (window.I.dice) {
                     console.log('----- DICE -------');
                     window.I.dice();
@@ -149,6 +145,7 @@
 
             window.I.goals = () => {
                 const { goalObjects, goalCodes } = getRandomGoals();
+                console.groupCollapsed('GOALS');
                 console.log(
                     'GOAL TYPES!  ',
                     goalObjects
@@ -159,7 +156,30 @@
                 console.log('Goal Codes!', goalCodes);
                 console.log('original', goalObjects.map(goal => goal.title));
                 console.log('hydrated', hydrateGoals(goalCodes).map(goal => goal.title));
+                console.groupEnd();
                 return goalObjects;
+            };
+
+            window.I.turns = () => {
+                const tests = {};
+
+                console.groupCollapsed('TURNS');
+
+                for (let i = 0; i < 28; i++) {
+                    const prior = i === 0 ? undefined : tests['turn_' + (i - 1)];
+                    const test = tests['turn_' + i] = updateTurns(prior);
+
+                    console.log('------------[  ' + i + '  ]------------');
+                    console.log('sideboard ' + i +'  | ', test.sideboard);
+                    console.log('deck      ' + i +'  | ', test.deck);
+                    console.log('played    ' + i +'  | ', test.played);
+                }
+
+                const hydrated = hydrateTurns(tests.turn_5);
+
+                console.log('------------[  Hydrated  ]------------');
+                console.log(hydrated);
+                console.groupEnd();
             };
 
         }

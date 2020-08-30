@@ -12,6 +12,7 @@
         line-height: 1;
         padding: 0 0 0 12px;
         margin: 0;
+        text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.15);
     }
 
     .input-section {
@@ -81,11 +82,16 @@
     }
 
     .message {
-        margin: 16px 0 0 12px;
-        font-size: 18px;
+        margin: 16px 0 10px 4px;
+        padding: 16px 8px 8px 26px;
+        background: rgba(50, 32, 16, 0.7);
+        color: rgb(220, 220, 220);
+        font-size: 14px;
+        border: solid 1px rgb(40, 20, 0);
+        border-radius: 4px;
     }
 
-    .message span {
+    .message span.game-name {
         font-size: 1.2em;
         font-weight: bold;
     }
@@ -104,19 +110,19 @@
         color: rgb(30, 10, 0);
     }
 
-    .go-button {
+    .action-buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         width: 100%;
     }
 
-    .go-button button  {
+    .action-buttons button  {
         background: rgb(250, 190, 80);
-        margin: 20px 0 0 8px;
+        margin: 40px 0 0 0;
     }
 
-    .go-button.midway button {
-        margin: 10px 0 40px 8px;
+    .action-buttons.midway button {
+        margin: 20px 0 20px -26px;
     }
 
 </style>
@@ -124,7 +130,7 @@
 
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { gStore } from '../store/store.js';
+    import { gStore, modalUX } from '../store/store.js';
 
     const dispatch = createEventDispatcher();
     const handlePlayOffline = () => dispatch('playOffline');
@@ -138,8 +144,7 @@
     $: localPlayer = gStore.player.getLocal();
 
     const handleGameInit = () => { 
-        console.log('handleGameInit'); 
-        gStore.roster.create(createGameName);
+        modalUX.chooseGoals(createGameName);
     };
 
     const handleGameJoin = () => { 
@@ -153,23 +158,23 @@
 <div class="modal-controls-wrap">
 
     <div class="app-title">
-        <h1>Prestige Cities</h1>
+        <h1>Cosmo·Polix</h1>
     </div>
 
     <div class="message">
-        <div>The game <span>"{createGameName}"</span> does not exist yet.</div>
+        <div>The game <span class="game-name">"{createGameName}"</span> does not exist yet.</div>
+        <div class="action-buttons midway">
+            <button on:click={handleGameInit}>Start New Game</button>
+        </div>
     </div>
 
-    <div class="go-button midway">
-        <button on:click={handleGameInit}>Start New Game</button>
-    </div>
 
     <div class={inputSectionClass}>
         <div class="title">Join another Game</div>
         <input bind:value={rosterName} placeholder="Game Name" />
     </div>
 
-    <div class="go-button">
+    <div class="action-buttons">
         <button disabled={!ready} on:click={handleGameJoin}>Join Game</button>
         <button on:click={handlePlayOffline}>Play Offline</button>
     </div>

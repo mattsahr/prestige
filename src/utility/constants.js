@@ -2,6 +2,7 @@ export const DUMMY_CHAR = '.';
 export const DUMMY_ID = 'DUMMY_PLAYER_ID_1234567';
 export const DEFAULT_PLAYER_NAME = 'Playah XYZ 7894';
 export const DEFAULT_CITY_NAME = 'Playah City XYZ 7894';
+export const PRE_GAME_ZERO_ERA = 'AA';
 
 export const PLOT_TYPE = {
     BLIGHT: 'BLIGHT',
@@ -36,6 +37,15 @@ export const SHORT_TYPES = {
 
 export const SPACER = '__';
 
+export const DICE_ORDER = [
+    PLOT_TYPE.COMMERCE, 
+    PLOT_TYPE.CULTURE, 
+    PLOT_TYPE.INDUSTRY, 
+    PLOT_TYPE.PARKS, 
+    PLOT_TYPE.RESIDENTIAL
+];
+
+
 export const ZERO_SCORE = {
     happiness: 0,
     wealth: 0,
@@ -66,7 +76,7 @@ export const ERA_META = (() => {
 
     return [
         {
-            era_id: 'AA',
+            era_id: PRE_GAME_ZERO_ERA,
             era: 'Pregame',
             rules: {
                 COMMERCE:    standard,
@@ -89,7 +99,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'What is it good for?  Industry.',
-            description: 'INDUSTRY only.'
+            description: '<span class="INDUSTRY">INDUSTRY</span> only.'
         },
         {
             era_id: 'AC',
@@ -102,7 +112,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'Gizmos shall save us.  Also Cloud, Artificial Intelligence, Windmills, Lasers, and The Bitcoin.',
-            description: 'COMMERCE and INDUSTRY only.'
+            description: '<span class="COMMERCE">COMMERCE</span> and <span class="INDUSTRY">INDUSTRY</span> only.'
         },
         {
             era_id: 'AD',
@@ -114,8 +124,9 @@ export const ERA_META = (() => {
                 PARKS:       X,
                 RESIDENTIAL: X
             },
+            showDescription: true,
             comment: 'Union Carbide Corporation V. Union Of India & Others.<br/>December 2, 1984 -- Bhopal, India',
-            description: 'Remove contiguous INDUSTRY squares from opponent, up to yellow die max.'
+            description: 'Remove contiguous <span class="INDUSTRY">INDUSTRY</span> squares from opponent, up to yellow die max.'
         },
         {
             era_id: 'AE',
@@ -127,8 +138,9 @@ export const ERA_META = (() => {
                 PARKS:       X,
                 RESIDENTIAL: standard
             },
+            showDescription: true,
             comment: 'The fire was barely fifteen minutes old. What followed was a series of fatal errors that set the fire free and doomed the city to a fiery death.',
-            description: 'Remove contiguous RESIDENTIAL squares from opponent, up to red die max.'
+            description: 'Remove contiguous <span class="RESIDENTIAL">RESIDENTIAL</span> squares from opponent, up to red die max.'
         },
         {
             era_id: 'AF',
@@ -140,6 +152,7 @@ export const ERA_META = (() => {
                 PARKS:       { active: true, exact: 1 },
                 RESIDENTIAL: { active: true, exact: 1 }
             },
+            showDescription: true,
             comment: 'The people who live in a golden age usually go around complaining how yellow everything looks.',
             description: 'Add one square of Each Type.'
         },
@@ -153,6 +166,7 @@ export const ERA_META = (() => {
                 PARKS:       { active: true, exact: 2 },
                 RESIDENTIAL: { active: true, exact: 2 }
             },
+            showDescription: true,
             comment: 'Before there were “selfies,” there was Me.',
             description: 'Any two contiguus of one color.'
         },
@@ -167,7 +181,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'It\'s a recession when your neighbor loses his job; it\'s a depression when you lose yours.',
-            description: 'No COMMERCE or RESIDENTIAL.'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span>.'
         },
         {
             era_id: 'AI',
@@ -180,7 +194,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'No one saw the recession coming.',
-            description: 'No COMMERCE or RESIDENTIAL or CULTURE'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span> or <span class="CULTURE">CULTURE</span>'
         },
         {
             era_id: 'AJ',
@@ -219,7 +233,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: '"Ah, but you can\'t turn back the clock. You can\'t go home again. You can\'t stop progress." Yes, you can.',
-            description: 'No CULTURE.'
+            description: 'No <span class="CULTURE">CULTURE</span>.'
         },
         {
             era_id: 'AN',
@@ -232,7 +246,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'Even in the midst of a terrible drought, someone will say, Of course I want it to rain, but not today.',
-            description: 'No PARKS'
+            description: 'No <span class="PARKS">PARKS</span>.'
         },
         {
             era_id: 'AO',
@@ -245,7 +259,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'I think the Baby Boom has enjoyed itself, maybe sometimes a little too much...',
-            description: 'RESIDENTIAL only.'
+            description: '<span class="RESIDENTIAL">RESIDENTIAL</span> only.'
         },
         {
             era_id: 'AP',
@@ -258,7 +272,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'This is a pandemic. I felt it was a pandemic long before it was called a pandemic.',
-            description: 'No INDUSTRY or RESIDENTIAL.'
+            description: 'No <span class="INDUSTRY">INDUSTRY</span> or <span class="RESIDENTIAL">RESIDENTIAL</span>.'
         },
         {
             era_id: 'AQ',
@@ -271,7 +285,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'The industrial revolution has tended to produce everywhere great urban masses that seem to be increasingly careless of ethical standards.',
-            description: 'INDUSTRY and RESIDENTIAL only.'
+            description: '<span class="INDUSTRY">INDUSTRY</span> and <span class="RESIDENTIAL">RESIDENTIAL</span> only.'
         }
     ];
 

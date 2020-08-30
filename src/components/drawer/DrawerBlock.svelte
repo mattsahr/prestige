@@ -37,6 +37,7 @@
         );
         transform: translate(500px, 0);
         transition: transform 200ms ease-out;
+        overflow-y: auto;
     }
     .close-me {
         width: 40px;
@@ -95,7 +96,7 @@
     <div class="drawer">
         <div class="close-me" on:click={handleDrawerClose}><MdClose /></div>
         <NextTurn handleDrawerClose={handleDrawerClose} />
-        <GoalList handleDrawerClose={handleDrawerClose} />
+        <GoalList />
         <PlayerList handleDrawerClose={handleDrawerClose} />
     </div>
 

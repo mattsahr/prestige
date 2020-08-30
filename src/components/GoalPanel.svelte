@@ -2,17 +2,42 @@
 
     .panel-title {
         width: 100%;
-        margin: -14px 0 12px 0;
+        margin: 0 0 12px 0;
+        display: flex;
+        justify-content: left;
+        background: rgba(70, 30, 0, 0.6);
+        border-radius: 4px;
+        padding: 12px 8px 8px 20px;
     }
+
+    .panel-title .label {
+        font-size: 14px;
+        color: rgb(230, 230, 230);
+        text-transform: uppercase;
+        padding: 0 0 4px 21px;
+        font-weight: bold;
+        letter-spacing: 0.01em;
+        text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+        line-height: min(24px, 5vw);
+    }
+
     h1 {
         font-family: 'Lalezar';
         color: rgb(230, 230, 230);
-        font-size: min(32px, 6vw);
-        line-height: 1;
+        font-size: min(24px, 5vw);
+        line-height: min(24px, 5vw);
         padding: 0 0 0 12px;
         margin: 0;
+    }
+
+    .sub-title {
+        font-size: 14px;
+        color: rgb(230, 230, 230);
         text-transform: uppercase;
-        width: 100%;
+        padding: 4px 0 6px 20px;
+        font-weight: bold;
+        letter-spacing: 0.04em;
+        text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);        
     }
 
     /* ----- MODAL SECTION -------------- */
@@ -70,8 +95,9 @@
 
     .action-buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         width: 100%;
+        padding: 20px 0 0 0;
     }
 
     .action-buttons button  {
@@ -102,13 +128,12 @@
     import { ExpansionPanel  } from 'svelte-mui/src';
     import GoArrowRight from 'svelte-icons/go/GoArrowRight.svelte';
     import MdRefresh from 'svelte-icons/md/MdRefresh.svelte';
-    import { goals, gStore } from '../store/store';
+    import { goals, gStore, modalUX } from '../store/store';
     import { hydrateGoals } from '../utility/helpers';
 
     export let main = false;
     export let modal = false;
     let group = '';
-    export let handleCloseGoalChooser = () => false;
 
     const wrapClass = main 
         ? 'goal-panel main-wrap' 
@@ -118,12 +143,18 @@
 
     const getRandomGoals = () => gStore.goals.generateRandom();
 
+    const handleCreateGame = () => {
+        gStore.roster.create($modalUX.chooseGoals.rosterName);
+
+    };
+
     $: goalsObject = hydrateGoals($goals);
 
     const init = () => {
         if (!$goals) {
             gStore.goals.generateRandom();
         }
+        console.log('rosterName?', $modalUX.chooseGoals.rosterName);
     };
 
     onMount(init);
@@ -133,8 +164,10 @@
 <div class={wrapClass}>
     {#if modal}
         <div class="panel-title">
-            <h1>Bonus Goals</h1>
+            <div class="label">New Game:</div>
+            <h1>{$modalUX.chooseGoals.rosterName}</h1>
         </div>
+        <div class="sub-title">Goals</div>
     {/if}
 
     {#if goalsObject && goalsObject.length}
@@ -156,10 +189,11 @@
     {#if modal}
         <div class="action-buttons">
             <button class="generate-random" on:click={getRandomGoals}>
-                ReShuffle
+                ReShuffle Goals
                 <span class="reshuffle-icon"><MdRefresh /></span>
             </button>
-            <button class="accept">Accept
+            <button class="accept" on:click={handleCreateGame}>
+                Accept
                 <span class="go-icon"><GoArrowRight /></span>
             </button>
         </div>

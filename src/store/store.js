@@ -15,7 +15,8 @@ import {
     composeLocalId, 
     composeNewBoard, 
     getLocalHash,
-    getRandomGoals
+    getRandomGoals,
+    updateTurns
 } from '../utility/helpers';
 import { calculateScore } from '../utility/scores';
 import { get as storeGet } from 'svelte/store';
@@ -125,6 +126,9 @@ const createGameStore = () => {
                     gameState.networkRosterState = _cloneDeep(networkRosterState);
                     gameState.rosterName = networkRosterState.name;
                     gameState.rosterAdminId = networkRosterState.admin;
+                    gameState.turns = _cloneDeep(networkRosterState.turns);
+                    gameState.goals = _cloneDeep(networkRosterState.goals);
+
                     confirmJoined(networkRosterState);
                     removeOrphans(networkRosterState.players);
                     addNewPlayers(networkRosterState.players);
@@ -328,8 +332,11 @@ const createGameStore = () => {
             const newRoster = {
                 name: rosterName,
                 players: [ gameState.___localPlayerId ],
-                admin: gameState.___localPlayerId
+                admin: gameState.___localPlayerId,
+                goals: gameState.goals,
+                turns: updateTurns()
             };
+
             sendToNetwork.roster.update(newRoster);
             sendToNetwork.board.update(localBoard);
             sendToNetwork.player.update(localPlayer);
@@ -337,6 +344,11 @@ const createGameStore = () => {
             gameState.rosterName = rosterName;
             gameState.rosterJoined = true;
             updateGame();
+        },
+        advanceTurn: () => {
+            const rosterData = _cloneDeep(gameState.networkRosterState);
+            rosterData.turns = updateTurns(rosterData.turns);
+            sendToNetwork.roster.update(rosterData);
         }
     };
 
@@ -564,14 +576,16 @@ export const currentTerrain = writable(PLOT_TYPE.PARKS);
 
 const createModalStore = () => {
     const {subscribe, set, update } = writable({
-        initPlayer: { show: false },
+        // GAME CREATION MODALS
+        initPlayer: { show: true },
         createGame: {
             show: false,
             rosterName: ''
         },
-        exitGame: { show: false },
+        chooseGoals: { show: false },
+        // OTHER MODALS
         warnNameChange: { show: false },
-        chooseGoals: { show: true },
+        exitGame: { show: false },
         confirmPlayerRemove: { show: false }
     });
 
@@ -582,6 +596,7 @@ const createModalStore = () => {
         const updated = _cloneDeep(UX);
         updated.initPlayer.show = false;
         updated.createGame.show = false;
+        updated.chooseGoals.show = false;
         set(updated);
     };
 
@@ -595,9 +610,20 @@ const createModalStore = () => {
         set(updated);
     };
 
+    const chooseGoals = (rosterName) => {
+        const updated = _cloneDeep(UX);
+        updated.initPlayer.show = false;
+        updated.createGame.show = false;
+
+        updated.chooseGoals.show = true;
+        updated.chooseGoals.rosterName = rosterName;
+        set(updated);
+    };
+
     return {
         closeRosterModals,
         showConfirmPlayerRemove,
+        chooseGoals,
 
         subscribe,
         set,

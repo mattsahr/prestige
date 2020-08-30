@@ -13,6 +13,7 @@
         line-height: 1;
         padding: 0 0 0 12px;
         margin: 0;
+        text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.15);
     }
 
     .input-section {
@@ -153,15 +154,15 @@
         color: rgb(30, 10, 0);
     }
 
-    .go-button {
+    .action-buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         width: 100%;
     }
 
-    .go-button button  {
+    .action-buttons button  {
         background: rgb(250, 190, 80);
-        margin: 20px 0 0 8px;
+        margin: 40px 0 0 0;
     }
 
     /* ------------ RESPONSIVE --------------- */
@@ -311,7 +312,7 @@
 
     {#if modal}
         <div class="app-title">
-            <h1>Prestige Cities</h1>
+            <h1>Cosmo·Polix</h1>
         </div>
     {/if}
 
@@ -339,7 +340,7 @@
         <IoIosOptions />
     </div>
     {:else}
-        <div class="go-button">
+        <div class="action-buttons">
             <button disabled={!ready} on:click={handleGameInit}>Join Game</button>
             <button on:click={handlePlayOffline}>Play Offline</button>
         </div>

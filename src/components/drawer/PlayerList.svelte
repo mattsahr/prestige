@@ -83,15 +83,16 @@
         player._id !== DUMMY_ID;
 
     const removePlayer = e => {
-        const _id = e.target.getAttribute('data-player-id');
-        const name = e.target.getAttribute('data-player-name');
+        const _id = e.currentTarget.getAttribute('data-player-id');
+        const name = e.currentTarget.getAttribute('data-player-name');
 
+        console.log('PlayerList >> removePlayer name', name, '  _id', _id);
         modalUX.showConfirmPlayerRemove(_id, name);
     };
 
     const viewPlayer = e => {
-        const _id = e.target.getAttribute('data-player-id');
-        const name = e.target.getAttribute('data-player-name');
+        const _id = e.currentTarget.getAttribute('data-player-id');
+        const name = e.currentTarget.getAttribute('data-player-name');
 
         console.log('viewPlayer!', name);
 
