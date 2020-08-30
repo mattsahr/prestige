@@ -3,7 +3,8 @@
 /src/node_modules/
 /src/node_modules/@sapper/
 /cypress/screenshots/
-/__sapper__/
+/__sapper__/build/
+/__sapper__/dev/
 /functions/node_modules/
 
 yarn-error.log
