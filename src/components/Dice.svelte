@@ -13,7 +13,7 @@
     }
 
     .dice-wrapper {
-        background-image: url('../..//textures/billie-holiday.png');
+        background-image: url('/images/textures/billie-holiday.png');
         height: 12vmin;
         max-height: 94px;
         min-height: calc(68px + 2vmin);
