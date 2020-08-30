@@ -18,7 +18,7 @@
         bottom: 0;
         left: 0;
         background-color: rgba(10, 80, 90);
-        background-image: url(../images/textures/vichy.png);
+        background-image: url(../..//textures/vichy.png);
         opacity: 0;
         transition: opacity 1100ms;
     }

@@ -21,7 +21,7 @@
         display: flex;
         flex-wrap: wrap;
         background: rgb(200, 90, 0);
-        background-image: url('../images/textures/back-pattern.png');
+        background-image: url('../..//textures/back-pattern.png');
         margin: -12px;
         border-radius: 4px;
         padding: 32px;

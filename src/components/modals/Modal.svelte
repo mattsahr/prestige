@@ -6,7 +6,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(150, 190, 210, 0.8);
-        background-image: url('../images/textures/billie-holiday.png');
+        background-image: url('../..//textures/billie-holiday.png');
          /* rgba(60, 66, 70, 0.9); */
         z-index: 1999;
     }

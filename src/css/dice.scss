@@ -32,14 +32,14 @@
     text-shadow: -1px -1px 4px rgba(0, 0, 0, 0.3);
     font-size: 32px;
     border-radius: 10px;
-    background-image:url('../images/textures/diagmonds-light.png');
+    background-image:url('../..//textures/diagmonds-light.png');
 }
 
 .dice-one .face {
     border: 1px solid rgba(0, 220, 30, 0.2);
     background-color: rgba(0, 210, 20, 0.2);
     transition: background-color 600ms;
-    background-image:url('../images/textures/batthern.png');
+    background-image:url('../..//textures/batthern.png');
 }
 
 .dice-one.show-back,
@@ -86,7 +86,7 @@
     border: 1px solid rgba(120, 0, 0, 0.2);
     background-color: rgba(230, 30, 30, 0.4);
     transition: background-color 600ms;
-    background-image:url('../images/textures/random-grey-variations.png');
+    background-image:url('../..//textures/random-grey-variations.png');
 }
 
 .dice-three.show-back,
@@ -107,7 +107,7 @@
     border: 1px solid rgba(80, 0, 100, 0.2);
     background-color: rgba(180, 30, 200, 0.4);
     transition: background-color 600ms;
-    background-image:url('../images/textures/flowers.png');
+    background-image:url('../..//textures/flowers.png');
 }
 
 .dice-four.show-back,
@@ -129,7 +129,7 @@
     border: 1px solid rgba(100, 100, 0, 0.2);
     background-color: rgba(240, 230, 30, 0.4);
     transition: background-color 600ms;
-    background-image:url('../images/textures/batthern.png');
+    background-image:url('../..//textures/batthern.png');
 }
 
 .dice-five.show-back,
