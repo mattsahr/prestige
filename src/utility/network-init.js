@@ -1,4 +1,4 @@
-import { makeField, makeKey } from '../../secretKeys';
+import { makeField, makeKey } from '../../datt';
 import network from './network';
 
 const networkInit = (function () {
