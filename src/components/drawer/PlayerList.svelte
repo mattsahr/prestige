@@ -63,7 +63,7 @@
 </style>
 
 <script>
-    import { ExpansionPanel  } from 'svelte-mui/src';
+    import { ExpansionPanel } from 'svelte-mui/src';
     import { DUMMY_ID } from '../../utility/constants';
     import { sortBoards } from '../../utility/helpers';
     import MdGridOn from 'svelte-icons/md/MdGridOn.svelte';

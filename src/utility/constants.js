@@ -174,8 +174,8 @@ export const ERA_META = (() => {
             era_id: 'AH',
             era: 'Depression',
             rules: {
-                COMMERCE:    standard,
-                CULTURE:     X,
+                COMMERCE:    X,
+                CULTURE:     standard,
                 INDUSTRY:    standard,
                 PARKS:       standard,
                 RESIDENTIAL: X

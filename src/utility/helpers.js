@@ -230,10 +230,7 @@ export const updateTurns = (() => {
             if (exact) {
                 turn += exact;
             } else {
-                turn += randomInt(
-                    (min || 1), 
-                    (max || 6)
-                );
+                turn += randomInt(1, 6);
             }
         }
         return turn;

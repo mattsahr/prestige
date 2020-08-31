@@ -696,7 +696,8 @@ export const opponentsUX = createOpponentsStore();
 
 const creatAdminStore = () => {
     const {subscribe, set, update } = writable({
-        showDrawer: false
+        showDrawer: false,
+        theme: 'Default'
     });
 
     let UX;
@@ -708,8 +709,15 @@ const creatAdminStore = () => {
         set(updated);        
     };
 
+    const updateTheme = theme => {
+        const updated = _cloneDeep(UX);
+        updated.theme = theme;
+        set(updated);
+    };
+
     return {
         toggleDrawer,
+        updateTheme,
 
         subscribe,
         set,
