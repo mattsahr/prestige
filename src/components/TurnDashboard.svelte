@@ -325,7 +325,6 @@
     })();
 
     const fadeIn = (node, {duration = 300}) => {
-        console.log('fadeIn!', currentIndex);
         animateNewTurn();
         return {
             duration,
@@ -424,7 +423,7 @@
                 {/each}
             </div>
 
-            <Dice diceRolls={currentView.dice} rules={currentView.rules} />
+            <Dice currentTurn={currentIndex} diceRolls={currentView.dice} rules={currentView.rules} />
 
         </div>
     </div>

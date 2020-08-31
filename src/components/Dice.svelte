@@ -85,6 +85,7 @@
         PARKS: 4,
         RESIDENTIAL: 5        
     };
+    export let currentTurn = 0;
 
     export let rules = {
         COMMERCE: {  active: true, min: 1, max: 5 },
@@ -110,11 +111,18 @@
         dice5: getDisplayClass(diceRolls.INDUSTRY, rules.INDUSTRY)
     };
 
+    const handleTurnChange = (() => {
+        let latestTurn = 0;
+        return current => {
+            if (latestTurn !== current) {
+                latestTurn = current;
+                rollDice(diceClasses);
+            }
+            return JSON.stringify(diceRolls);
+        };
+    })();
 
-    $: jailbreak = () => {
-        rollDice(diceClasses);
-        return JSON.stringify(diceRolls);
-    };
+    $: jailbreak = () => handleTurnChange(currentTurn);
 
     const getContent = type => {
         const content = inactive(diceRolls[type], rules[type])

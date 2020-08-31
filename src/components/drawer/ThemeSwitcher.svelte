@@ -24,7 +24,7 @@
 </script>
 
 
-<ExpansionPanel name="Theme" >
+<ExpansionPanel dense name="Theme" >
     {#each Object.keys(themeOptions) as key}
         <Radio bind:group color={'#43a047'} value={key} 
             data-key={key} on:click={handleClick} >

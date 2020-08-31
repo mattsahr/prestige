@@ -16,6 +16,7 @@ import {
     composeNewBoard, 
     getLocalHash,
     getRandomGoals,
+    preGameTurnZero,
     updateTurns
 } from '../utility/helpers';
 import { calculateScore } from '../utility/scores';
@@ -486,7 +487,8 @@ const createGameStore = () => {
         player: playerId => gameState.players.find(player => player._id === playerId),
         board: playerId => playerId 
             ? _cloneDeep(gameState.boards.find(board => board._id === playerId).state)
-            : boardState.composeNew()
+            : boardState.composeNew(),
+        turns: () => gameState.turns
     };
 
     return {
@@ -525,10 +527,6 @@ export const rosterName = derived(
     gStore => gStore.rosterName
 );
 
-export const turns = derived(
-    gStore,
-    gStore => gStore.turns
-);
 
 
 export const localBoard = (() => {
@@ -573,6 +571,30 @@ export const localBonus = derived(
 );
 
 export const currentTerrain = writable(PLOT_TYPE.PARKS);
+
+const createTurnStore = () => {
+
+    const {subscribe, set, update } = writable({
+        played: [ preGameTurnZero ]
+    });
+
+    let TURNS;
+
+    gStore.subscribe(gameState => { 
+        if (!_isEqual(TURNS, gameState.turns)) {
+            TURNS = gameState.turns;
+            set(TURNS);
+        }
+    });
+
+    return {
+        subscribe,
+        set,
+        update
+    };
+};
+
+export const turns = createTurnStore();
 
 const createModalStore = () => {
     const {subscribe, set, update } = writable({

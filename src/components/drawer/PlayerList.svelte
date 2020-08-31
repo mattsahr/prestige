@@ -104,11 +104,13 @@
         console.log(detail.expanded ? 'open' : 'close', detail.name);
     };
 
-    $: opponents = $players.filter(isOpponent).sort(sortBoards($scores)).reverse();
+    $: opponents = $players.filter(isOpponent)
+        .filter(player => $scores[player._id])
+        .sort(sortBoards($scores)).reverse();
 
 </script>
 
-<ExpansionPanel name="Players" on:change={onchage}>
+<ExpansionPanel name="Players" dense on:change={onchage}>
 
     {#each opponents as player}
         <div class="player">

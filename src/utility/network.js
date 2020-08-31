@@ -28,9 +28,15 @@ const network = (() => {
     const player = {
         watchers: {},
         watch: playerId => { if (!playerId || playerId === DUMMY_ID) { return; }
+            if (player.watchers[playerId]) {
+                return;
+            }
+
             player.watchers[playerId] = FB.collection('player').doc(playerId)
                 .onSnapshot(player => {
-                    sendToGameStore.player.update(player.data());
+                    if (player.data()) {
+                        sendToGameStore.player.update(player.data());
+                    }
                 });
         },
         watchStop: playerId => {
@@ -69,7 +75,9 @@ const network = (() => {
             roster.watchers[rosterName] = FB.collection('roster').doc(rosterName)
                 .onSnapshot(roster => {
                     console.log('WATCH roster', roster.data());
-                    sendToGameStore.roster.update(roster.data());
+                    if (roster.data()) {
+                        sendToGameStore.roster.update(roster.data());
+                    }
                 });
         },
 
@@ -126,13 +134,15 @@ const network = (() => {
 
             board.watchers[boardId] = FB.collection('board').doc(boardId)
                 .onSnapshot(boardDoc => {
-                    const { _id, state, bonus } = boardDoc.data();
-                    const hydrated = hydrateBoardState(state);
+                    if (boardDoc.data()) {
+                        const { _id, state, bonus } = boardDoc.data();
+                        const hydrated = hydrateBoardState(state);
 
-                    sendToGameStore.board.update(
-                        _id, 
-                        { _id, bonus, state: hydrated }
-                    );
+                        sendToGameStore.board.update(
+                            _id, 
+                            { _id, bonus, state: hydrated }
+                        );
+                    }
                 });
         },
         watchStop: boardId => {

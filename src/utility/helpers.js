@@ -1,4 +1,5 @@
 import _cloneDeep from 'lodash/cloneDeep';
+import _memoize from 'lodash/memoize';
 
 import { 
     DEFAULT_CITY_NAME,
@@ -190,7 +191,7 @@ export const dummyTurn = [
     }
 ];
 
-export const hydrateTurns = (() => {
+const hydrateTurnsBase = (() => {
 
     const hydrateTurn = (turnString, index) => {
         const [ era_id, rollString ] = turnString.split(SPACER);
@@ -217,9 +218,13 @@ export const hydrateTurns = (() => {
     };
 })();
 
-export const updateTurns = (() => {
+const turnChangeResolver = turns => (turns && turns.length) || 0;
 
-    const preGameTurnZero = ERA_META[0].era_id + SPACER + '24513';
+export const hydrateTurns = _memoize(hydrateTurnsBase, turnChangeResolver);
+
+export const preGameTurnZero = ERA_META[0].era_id + SPACER + '24513';
+
+export const updateTurns = (() => {
 
     const rollDice = era_id => {
         const { rules } = ERA_META.find(era => era.era_id === era_id);
