@@ -176,35 +176,35 @@ export const ERA_META = (() => {
             rules: {
                 COMMERCE:    X,
                 CULTURE:     standard,
-                INDUSTRY:    standard,
+                INDUSTRY:    X,
                 PARKS:       standard,
                 RESIDENTIAL: X
             },
             comment: 'It\'s a recession when your neighbor loses his job; it\'s a depression when you lose yours.',
-            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span>.'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span> or <span class="INDUSTRY">INDUSTRY</span>.'
         },
         {
             era_id: 'AI',
             era: 'Recession',
             rules: {
                 COMMERCE:    X,
-                CULTURE:     X,
-                INDUSTRY:    standard,
+                CULTURE:     standard,
+                INDUSTRY:    X,
                 PARKS:       standard,
-                RESIDENTIAL: X
+                RESIDENTIAL: standard
             },
             comment: 'No one saw the recession coming.',
-            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span> or <span class="CULTURE">CULTURE</span>'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="INDUSTRY">INDUSTRY</span>'
         },
         {
             era_id: 'AJ',
             era: 'Stagflation',
             rules: {
-                COMMERCE:    { active: true, min: 1, max: 3 },
-                CULTURE:     { active: true, min: 1, max: 3 },
-                INDUSTRY:    { active: true, min: 1, max: 3 },
-                PARKS:       { active: true, min: 1, max: 3 },
-                RESIDENTIAL: { active: true, min: 1, max: 3 }
+                COMMERCE:    { active: true, min: 1, max: 2 },
+                CULTURE:     { active: true, min: 1, max: 2 },
+                INDUSTRY:    { active: true, min: 1, max: 2 },
+                PARKS:       { active: true, min: 1, max: 2 },
+                RESIDENTIAL: { active: true, min: 1, max: 2 }
             },
             comment: 'Stagflation is a very unpopular buzz word in the business world',
             description: 'Any type, 3 or less on the dice.'

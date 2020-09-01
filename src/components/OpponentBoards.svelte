@@ -112,6 +112,22 @@
         Math.min(num, upperBound)
     );
 
+    const featureBoard = (_id, source) => {
+        opponentsUX.feature.show({
+            _id: _id,
+            source
+            /*
+            {
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height
+            }
+            */
+        });
+
+    };
+
 /*    const boardStatusUpdate = (() => {
         let showBoards = false;
 
@@ -129,7 +145,7 @@
             return showBoards ? 'show-boards' : 'minified';
         };
     })();
-*/
+*/  
     const getMin = () => Math.min(getDocWidth(), getDocHeight());
 
     const sliderPadding = 6;
@@ -152,7 +168,7 @@
             {#if $opponentsUX.showBoards}<MdExpandMore />{:else}<MdExpandLess />{/if}
         </div>
         {#each [wrapperClass] as count (wrapperClass)} <!-- HACK TO RE-RENDER -->
-            <Swipe itemWidth={currentWidth || 140} >
+            <Swipe featureBoard={featureBoard} itemWidth={currentWidth || 140} >
                 {#each opponents as board}
                     <SwipeItem>
                         <div class="opponent">

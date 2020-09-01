@@ -45,6 +45,7 @@
     export let itemWidth = 0;
     export let itemHeight = 0;
     export let swipeClass = '';
+    export let featureBoard = false;
 
     let swipeHandler;
     let itemCount = 0;
@@ -141,7 +142,6 @@
         stopEvent(e);
         touching = true;
         axis = e.touches ? e.touches[0][page_axis] : e[page_axis];
-
         if (typeof window !== 'undefined') {
             window.addEventListener('mousemove', moveHandler);
             window.addEventListener('mouseup', endHandler);
@@ -165,6 +165,37 @@
         }
     }
 
+    const doubleClickHandler = e => {
+
+        if (featureBoard) {
+
+            const players = swipeWrapper.querySelectorAll('.player-info');
+            const X = e.pageX;
+
+            for (const player of players) {
+                const rect = player.getBoundingClientRect();
+                const left = rect.x;
+                const right = rect.x + rect.width;
+
+                if (left <= X && X <= right) {
+                    const _id = player.getAttribute('data-player-id');
+                    console.log('PLAYER ID!', _id);
+
+                    const source = {
+                        top: rect.top,
+                        left: rect.left,
+                        width: rect.width,
+                        height: rect.height
+                    };
+
+                    featureBoard(_id, source);
+                    break;
+                }
+            }
+        }
+
+    };
+
     $: swipePanelClass = 'swipe-panel' + (swipeClass ? ' ' + swipeClass : '');
     $: swipeHandlerClass = 'swipe-handler' + (swipeClass ? ' ' + swipeClass : '');
 
@@ -181,7 +212,8 @@
     </div>
 
     <div class={swipeHandlerClass}
-        bind:this={swipeHandler} 
+        bind:this={swipeHandler}
+        on:dblclick={doubleClickHandler}
         on:touchstart={moveStart} 
         on:mousedown={moveStart}>
     </div>

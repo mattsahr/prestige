@@ -60,6 +60,21 @@ const createGameStore = () => {
             },
             update: (() => {
 
+                const checkSelfKickedOut = networkRosterState => {
+                    if (!gameState.joined) {
+                        // can't be kicked out til you've joined.
+                        return false;
+                    }
+                    const localPlayer = player.getLocal();
+                    const kickedOut = !networkRosterState.players.includes(localPlayer._id);
+                    if (kickedOut) {
+                        globalReset();
+                        return true;
+                    }
+
+                    return false;
+                };
+
                 const removeOrphans = networkPlayers => {
 
                     const localPlayer = player.getLocal();
@@ -124,6 +139,11 @@ const createGameStore = () => {
                     if (!checkRoster(networkRosterState)) {
                         return;
                     }
+
+                    if (checkSelfKickedOut(networkRosterState)) {
+                        return;
+                    }
+
                     gameState.networkRosterState = _cloneDeep(networkRosterState);
                     gameState.rosterName = networkRosterState.name;
                     gameState.rosterAdminId = networkRosterState.admin;
@@ -194,6 +214,10 @@ const createGameStore = () => {
             update: board => {
                 const localPlayer = player.getLocal();
                 network.board.update(board, localPlayer);
+            },
+            watchStop: boardId => {
+                const localPlayer = player.getLocal();
+                network.board.watchStop(boardId, localPlayer);
             }
         },
 
@@ -223,7 +247,8 @@ const createGameStore = () => {
                 network.roster.update(rosterData, localPlayer);
             },
             removePlayer: (rosterData, playerToRemove) => {
-                console.error('SEND TO NETWORK -- UNFINISHED', playerToRemove);
+                console.error('sendToNetwork.roster.removePlayer() NOT IN USE');
+                console.log('roster', rosterData, '  attempted to remove', playerToRemove);
                 // const localPlayer = player.getLocal();
                 // network.roster.update(roster, localPlayer); 
             },
@@ -240,6 +265,10 @@ const createGameStore = () => {
             create: rosterData => {
                 const localPlayer = player.getLocal();
                 network.roster.update(rosterData, localPlayer);
+            },
+            watchStop: rostername => {
+                const localPlayer = player.getLocal();
+                network.roster.watchStop(rosterName, localPlayer);
             }
         },
 
@@ -254,13 +283,53 @@ const createGameStore = () => {
                 network.board.remove(oldPlayer._id, localPlayer);
             },
             remove: player => {
-                sendToNetwork.roster()
-                const localPlayer = player.getLocal();
-                network.player.remove(oldPlayer._id, localPlayer); 
+                console.error('sendToNetwork.player.remove() NOT IN USE');
+                console.log('Attemtped to remove:', player);
+                // sendToNetwork.roster();
+                // const localPlayer = player.getLocal();
+                // network.player.remove(oldPlayer._id, localPlayer); 
                 // network.board.remove(oldPlayer._id, localPlayer);
+            },
+            watchStop: playerId => {
+                const localPlayer = player.getLocal();
+                network.player.watchStop(playerId, localPlayer);
             }
         }
 
+    };
+
+    const globalReset = () => {
+
+        console.log('GLOBAL RESET!!!');
+
+        sendToNetwork.roster.watchStop(gameState.rosterName);
+        for (const _id of gameState.players.map(player => player._id)) {
+            if (_id !== gameState.___localPlayerId) {
+                sendToNetwork.player.watchStop(_id);
+                sendToNetwork.board.watchStop('_id');
+            }
+        }
+
+        const exitedGame = gameState.rosterName;
+
+        const newBoard = composeNewBoard(gameState.___localPlayerId);
+        sendToNetwork.board.update(newBoard);
+
+        gameState.boards = [ composeNewBoard(gameState.___localPlayerId) ];
+        gameState.players = [ 
+            gameState.players.find(player => player._id === gameState.___localPlayerId )
+        ];
+        gameState.scores = { [gameState.___localPlayerId]:  _cloneDeep(STARTING_SCORE) };
+        gameState.rosterName = '';
+        gameState.rosterAdminId = '';
+        gameState.turns = { played: [ preGameTurnZero ] };
+        gameState.goals = getRandomGoals();
+        gameState.networkRosterState = null;
+        gameState.joined = false;
+        updateGame();
+        modalUX.alertExit(exitedGame);
+
+        console.log('RESET GAME STATE', gameState);
     };
 
 
@@ -614,6 +683,15 @@ const createModalStore = () => {
     let UX;
     subscribe(ux => UX = ux);
 
+    const alertExit = exitedGame => {
+        const updated = _cloneDeep(UX);
+        updated.initPlayer = { 
+            show: true,
+            exitedGame
+        };
+        set(updated);
+    };
+
     const closeRosterModals = () => {
         const updated = _cloneDeep(UX);
         updated.initPlayer.show = false;
@@ -646,6 +724,7 @@ const createModalStore = () => {
         closeRosterModals,
         showConfirmPlayerRemove,
         chooseGoals,
+        alertExit,
 
         subscribe,
         set,

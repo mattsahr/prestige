@@ -7,6 +7,7 @@
     import ConfirmRemovePlayer from './ConfirmRemovePlayer.svelte';
 
     $: showIntro = $modalUX.initPlayer.show;
+    $: exitedGame = $modalUX.initPlayer.exitedGame || '';
     $: showCreateGame = $modalUX.createGame.show;
     $: createGameName = $modalUX.createGame.rosterName;
     $: warnNameChange = $modalUX.warnNameChange.show;
@@ -58,7 +59,7 @@
 
 {#if showIntro}
     <Modal >
-        <PlayerForm modal on:playOffline={handlePlayOffline} />
+        <PlayerForm exitedGame={exitedGame} modal on:playOffline={handlePlayOffline} />
     </Modal>
 {/if}
 

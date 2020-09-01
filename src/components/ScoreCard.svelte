@@ -182,6 +182,9 @@
                 console.groupEnd();
             };
 
+
+            document.body.classList.add('theme-B');
+
         }
     };
 

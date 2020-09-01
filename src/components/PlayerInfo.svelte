@@ -219,7 +219,7 @@
 
 </script>
 
-<div class={playerInfoClass} on:click={handleClick}>
+<div class={playerInfoClass} data-player-id={player._id} on:click={handleClick}>
     <div class="main">
         <div class="names">
             <div class="city-name">{player.city}</div>

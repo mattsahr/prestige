@@ -3,7 +3,18 @@
     .app-title {
         display: flex;
         width: 100%;
-        justify-content: space-between;
+        align-items: center;
+    }
+
+    .app-title.exited {
+        background: rgb(60, 54, 50);
+        margin: -24px 0 8px 0;
+        height: 54px;
+        line-height: 54px;
+        justify-content: center;
+        box-shadow: 2px 2px;
+        border-radius: 3px;
+        box-shadow: 2px 4px 11px rgba(100, 60, 0, 0.3);
     }
 
     h1 {
@@ -14,6 +25,22 @@
         padding: 0 0 0 12px;
         margin: 0;
         text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.15);
+    }
+
+    .exited-message {
+        color: rgb(210, 130, 10);
+        font-size: 15px;
+        padding: 0px 19px 0 0;
+        line-height: 15px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .exited-game {
+        color: rgb(220, 220, 220);
+        font-size: 23px;
+        padding: 0;
     }
 
     .input-section {
@@ -206,6 +233,7 @@
 
     export let header = false;
     export let modal = false;
+    export let exitedGame = '';
     export let playerName = '';
     export let currentRosterName = '';
     export let cityName = '';
@@ -311,9 +339,16 @@
 <div class={wrapClass} bind:clientWidth={fullWidth}>
 
     {#if modal}
-        <div class="app-title">
-            <h1>Cosmo·Polix</h1>
-        </div>
+        {#if exitedGame}
+            <div class="app-title exited">
+                <div class="exited-message">Exited<br />Game:</div>
+                <div class="exited-game">{exitedGame}</div>
+            </div>
+        {:else}
+            <div class="app-title">
+                <h1>Cosmo·Polix</h1>
+            </div>
+        {/if}
     {/if}
 
     <div class={inputSectionClass + ' player-name'}>
