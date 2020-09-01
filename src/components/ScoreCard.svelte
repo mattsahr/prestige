@@ -183,7 +183,7 @@
             };
 
 
-            document.body.classList.add('theme-B');
+            // document.body.classList.add('theme-B');
 
         }
     };
