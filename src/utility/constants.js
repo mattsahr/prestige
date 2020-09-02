@@ -175,13 +175,13 @@ export const ERA_META = (() => {
             era: 'Depression',
             rules: {
                 COMMERCE:    X,
-                CULTURE:     standard,
+                CULTURE:     X,
                 INDUSTRY:    X,
                 PARKS:       standard,
-                RESIDENTIAL: X
+                RESIDENTIAL: standard
             },
             comment: 'It\'s a recession when your neighbor loses his job; it\'s a depression when you lose yours.',
-            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span> or <span class="INDUSTRY">INDUSTRY</span>.'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="CULTURE">CULTURE</span> or <span class="INDUSTRY">INDUSTRY</span>.'
         },
         {
             era_id: 'AI',
@@ -284,8 +284,22 @@ export const ERA_META = (() => {
                 PARKS:       X,
                 RESIDENTIAL: standard
             },
+            expansion: 'BLIGHT',
             comment: 'The industrial revolution has tended to produce everywhere great urban masses that seem to be increasingly careless of ethical standards.',
             description: '<span class="INDUSTRY">INDUSTRY</span> and <span class="RESIDENTIAL">RESIDENTIAL</span> only.'
+        },
+        {
+            era_id: 'AR',
+            era: 'Roaring Market',
+            rules: {
+                COMMERCE:    standard,
+                CULTURE:     X,
+                INDUSTRY:    X,
+                PARKS:       X,
+                RESIDENTIAL: X
+            },
+            comment: 'What we need to understand is, one, that there are market failures; and two, that there are things like asset bubbles and irrational exuberance.',
+            description: '<span class="COMMERCE">COMMERCE</span> only.'
         }
     ];
 

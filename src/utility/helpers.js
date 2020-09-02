@@ -231,7 +231,7 @@ export const updateTurns = (() => {
 
         let turn = era_id + SPACER;
         for (let i = 0; i < 5; i++) {
-            const { min, max, exact } = rules[DICE_ORDER[i]];
+            const { exact } = rules[DICE_ORDER[i]];
             if (exact) {
                 turn += exact;
             } else {
@@ -263,7 +263,7 @@ export const updateTurns = (() => {
         return array;
     }
 
-    const shuffle = (currentTurns = {}) => {
+    const shuffle = (currentTurns = {}, includedExpansions = []) => {
 
         const played = currentTurns.played || [ preGameTurnZero ];
         const sideboard = currentTurns.sideboard || [];
@@ -272,6 +272,7 @@ export const updateTurns = (() => {
         const newDeck = [ ...oldDeck, ...sideboard ];
 
         const sourceEras = ERA_META
+            .filter(era => !era.expansion || includedExpansions.indexOf(era.expansion) !== -1)
             .map(era => era.era_id)
             .filter(era_id => era_id !== PRE_GAME_ZERO_ERA)
             .filter(era_id => newDeck.indexOf(era_id) === -1);

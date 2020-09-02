@@ -126,7 +126,6 @@
     $: classHappiness = 'score-panel happiness' + (scoreHappiness ? ' active' : '');
     $: classWealth = 'score-panel wealth' + (scoreWealth ? ' active' : '');
 
-
     const createLoggers = () => {
         if (window) {
 
@@ -182,12 +181,21 @@
                 console.groupEnd();
             };
 
-
-            // document.body.classList.add('theme-B');
-
         }
     };
 
+    const setTheme = () => {
+        if (window.Cookies) {
+            const theme = window.Cookies.get('theme');
+            console.log('COOKIES: GOT A THEME!', theme);
+
+            if (theme && theme !== 'theme-default') {
+                document.body.classList.add('theme-B');
+            }
+        }
+    };
+
+    onMount(setTheme);
     onMount(createLoggers);
 
 </script>

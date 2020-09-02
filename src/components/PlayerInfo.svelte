@@ -35,6 +35,10 @@
         z-index: 10;
     }
 
+    .player-info.tab-featured {
+        background-color: rgb(0, 160, 100, 0.3);
+    }
+
     .main {
         display: flex;
         justify-content: space-between;
@@ -177,6 +181,7 @@
     export let score = {};
     export let playerClass = '';
     export let featuredOpponent = false;
+    export let tabFeatured = false;
 
 
     const stopEvent = e => { 
@@ -215,7 +220,8 @@
 
     $: playerInfoClass = 'player-info' + 
         (playerClass ? ' ' + playerClass : '') +
-        (featuredOpponent ? ' featured-opponent' : '');
+        (featuredOpponent ? ' featured-opponent' : '') + 
+        (tabFeatured ? ' tab-featured' : '');
 
 </script>
 

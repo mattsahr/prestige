@@ -29,7 +29,7 @@
         left: 0;
         right: 0;
         background: rgba(0,0,0,0);
-        cursor: ew-resize;
+        cursor: pointer;
     }
 
     .swipe-handler.show-boards {
@@ -45,7 +45,7 @@
     export let itemWidth = 0;
     export let itemHeight = 0;
     export let swipeClass = '';
-    export let featureBoard = false;
+    export let featureNextBoard = false;
 
     let swipeHandler;
     let itemCount = 0;
@@ -150,7 +150,6 @@
         }
     }
 
-
     function endHandler(e) { 
         stopEvent(e);
         touching = false;
@@ -167,7 +166,10 @@
 
     const doubleClickHandler = e => {
 
-        if (featureBoard) {
+        // TODO -- LONG PRESS FOR MOBILE
+        // https://stackoverflow.com/questions/2625210/long-press-in-javascript#2625240
+
+        if (featureNextBoard) {
 
             const players = swipeWrapper.querySelectorAll('.player-info');
             const X = e.pageX;
@@ -188,7 +190,7 @@
                         height: rect.height
                     };
 
-                    featureBoard(_id, source);
+                    featureNextBoard(_id, source);
                     break;
                 }
             }

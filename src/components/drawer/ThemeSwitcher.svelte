@@ -17,6 +17,12 @@
         for (const theme of Object.values(themeOptions)) {
             document.body.classList.remove(theme);   
         }
+        if (window.Cookies) {
+            window.Cookies.set('theme', nextTheme, 30);
+
+            console.log('Cookies Set!', nextTheme);
+        }
+
         document.body.classList.add(nextTheme);
         adminUX.updateTheme(themeName);
     };

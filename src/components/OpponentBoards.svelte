@@ -112,7 +112,7 @@
         Math.min(num, upperBound)
     );
 
-    const featureBoard = (_id, source) => {
+    const featureNextBoard = (_id, source) => {
         opponentsUX.feature.show({
             _id: _id,
             source
@@ -147,6 +147,10 @@
     })();
 */  
     const getMin = () => Math.min(getDocWidth(), getDocHeight());
+    const getFeaturedId = (opponentsUX) => {
+        console.log('opponentsUX', opponentsUX);
+        return false;
+    };
 
     const sliderPadding = 6;
     $: opponents = $boards.filter(isOpponent).sort(sortBoards($scores)).reverse();
@@ -159,6 +163,9 @@
         ? clamp( 280, (0.42 * getMin()), 600 ) + sliderPadding
         : clamp( 140, (0.21 * getMin()), 200 ) + sliderPadding;
     $: tabClass = $opponentsUX.showFeatured  ? 'footer-control-tab feature-board-active' : 'footer-control-tab';
+    $: currentFeaturedId = $opponentsUX.showFeatured && 
+        $opponentsUX.featuredBoard && 
+        $opponentsUX.featuredBoard._id;
 
 </script>
 
@@ -168,11 +175,12 @@
             {#if $opponentsUX.showBoards}<MdExpandMore />{:else}<MdExpandLess />{/if}
         </div>
         {#each [wrapperClass] as count (wrapperClass)} <!-- HACK TO RE-RENDER -->
-            <Swipe featureBoard={featureBoard} itemWidth={currentWidth || 140} >
+            <Swipe featureNextBoard={featureNextBoard} itemWidth={currentWidth || 140} >
                 {#each opponents as board}
                     <SwipeItem>
                         <div class="opponent">
                             <PlayerInfo 
+                                tabFeatured={board._id === currentFeaturedId}
                                 playerClass={getBoardClass(board._id) + boardStatus}
                                 player={getPlayer(board._id)} 
                                 score={$scores[board._id]} />

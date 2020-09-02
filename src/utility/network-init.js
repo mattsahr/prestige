@@ -123,7 +123,10 @@ const networkInit = (function () {
             loadFirebase();
         };
         
-        return () => { loadFile('js/fingerprint2-min.js', success); };
+        return () => { 
+            loadFile('js/cookies.js');
+            loadFile('js/fingerprint2-min.js', success); 
+        };
     })();
 
     return loadScripts;

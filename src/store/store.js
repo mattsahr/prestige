@@ -737,7 +737,7 @@ export const modalUX = createModalStore();
 const createOpponentsStore = () => {
     const {subscribe, set, update } = writable({
         showBoards: false,
-        featureBoard: null,
+        featuredBoard: null,
         showFeatured: false
     });
 
@@ -756,8 +756,8 @@ const createOpponentsStore = () => {
     const feature = {
         clearSource: () => {
             const updated = _cloneDeep(UX);
-            if (updated.featureBoard && updated.featureBoard.source) {
-                delete updated.featureBoard.source;
+            if (updated.featuredBoard && updated.featuredBoard.source) {
+                delete updated.featuredBoard.source;
             }
             set(updated);
         },
