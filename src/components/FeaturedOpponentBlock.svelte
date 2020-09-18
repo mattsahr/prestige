@@ -100,6 +100,10 @@
         opacity: 0;
     }
 
+    .tracker {
+        display: none;
+    }
+
     @media all and (max-width: 419px), (max-height: 419px) {
         .featured-opponent-block {
             width: 98vmin;
@@ -110,6 +114,7 @@
 
 <script>
     import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
     import MdClose from 'svelte-icons/md/MdClose.svelte';
     import MdChevronLeft from 'svelte-icons/md/MdChevronLeft.svelte';
     import MdChevronRight from 'svelte-icons/md/MdChevronRight.svelte';
@@ -139,6 +144,7 @@
     $: player = ($opponentsUX.featuredBoard && $opponentsUX.showFeatured) 
         ? $players.find(next => next._id === $opponentsUX.featuredBoard._id)
         : null;
+
 
     $: boardIndex = opponents.indexOf(board);
     $: goRightClass = 'go-right' + (boardIndex >= (opponents.length - 1) ? ' disabled' : '');
@@ -246,6 +252,7 @@
         closePhase2();
     };
 
+
     const initPhase2 = (() => {
 
         const phase2 = () => {
@@ -310,13 +317,11 @@
 
 
     <div class="frame">
-
         <div class="featured-opponent-block">
             <PlayerInfo player={player} score={$scores[board._id]} featuredOpponent={true} />
             <GameBoard board={board} inactive={false} featuredOpponent={true} />
             <TerrainChooser featuredOpponent={true} />
         </div>
-
     </div>
 
 </div>

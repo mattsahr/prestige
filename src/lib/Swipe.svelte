@@ -69,7 +69,6 @@
     function updateSwipe() {
         const { offsetWidth, offsetHeight } = swipeWrapper.querySelector('.swipeable-itemCount');
 
-        console.log('UPDATE SWIPE >> offsetWidth', offsetWidth, ' itemWidth', itemWidth);
         availableSpace = is_vertical 
             ? itemHeight || offsetHeight 
             : itemWidth || offsetWidth;
@@ -112,8 +111,6 @@
                 _diff = pos_axis - (_axis - axis); 
             }
 
-            // console.log('dir', dir, ' min [' + min + ', ' + _diff + ', ' + max + ']');
-
             if (_diff <= (max * (itemCount - 1)) && _diff >= min) {
 
                 for (let i = 0; i < itemCount; i++) {
@@ -130,6 +127,11 @@
         }
     }
 
+    const moveTracker = {
+        x: 0,
+        timeStamp: 0
+    };
+
     const stopEvent = e => { 
         if (e) { 
             e.stopImmediatePropagation(); 
@@ -142,6 +144,11 @@
         stopEvent(e);
         touching = true;
         axis = e.touches ? e.touches[0][page_axis] : e[page_axis];
+
+        moveTracker.priorStamp = moveTracker.timeStamp || 0;
+        moveTracker.timeStamp = e.timeStamp;
+        moveTracker.X = e.touches ? e.touches[0].pageX : e.pageX;
+
         if (typeof window !== 'undefined') {
             window.addEventListener('mousemove', moveHandler);
             window.addEventListener('mouseup', endHandler);
@@ -156,6 +163,34 @@
         axis = null;
         pos_axis = diff;
 
+        if ((e.timeStamp - moveTracker.timeStamp) < 100) {
+            const source = e.changedTouches ? e.changedTouches[0] : e;
+
+            if (Math.abs(source.pageX - moveTracker.X) < 30) {
+                if ((moveTracker.timeStamp - moveTracker.priorStamp) < 350) {
+                    console.log(
+                        'A: ts', moveTracker.timeStamp, 
+                        ' ps', moveTracker.priorStamp,
+                        ' <>', (moveTracker.timeStamp - moveTracker.priorStamp)
+                    );
+                    doubleClickHandler(source);
+                }
+            }
+        } else {
+            const source = e.changedTouches ? e.changedTouches[0] : e;
+            if (Math.abs(source.pageX - moveTracker.X) < 6) {
+                if ((moveTracker.timeStamp - moveTracker.priorStamp) < 350) {
+                    console.log(
+                        'B: ts', moveTracker.timeStamp, 
+                        ' ps', moveTracker.priorStamp,
+                        ' <>', (moveTracker.timeStamp - moveTracker.priorStamp)
+                    );
+                    doubleClickHandler(source);
+                }
+
+            }
+        }
+
         if (typeof window !== 'undefined') {
             window.removeEventListener('mousemove', moveHandler);
             window.removeEventListener('mouseup', endHandler);
@@ -166,13 +201,12 @@
 
     const doubleClickHandler = e => {
 
-        // TODO -- LONG PRESS FOR MOBILE
-        // https://stackoverflow.com/questions/2625210/long-press-in-javascript#2625240
-
         if (featureNextBoard) {
 
             const players = swipeWrapper.querySelectorAll('.player-info');
             const X = e.pageX;
+
+
 
             for (const player of players) {
                 const rect = player.getBoundingClientRect();
@@ -181,7 +215,6 @@
 
                 if (left <= X && X <= right) {
                     const _id = player.getAttribute('data-player-id');
-                    console.log('PLAYER ID!', _id);
 
                     const source = {
                         top: rect.top,

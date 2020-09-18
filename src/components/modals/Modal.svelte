@@ -27,6 +27,10 @@
         box-shadow: 8px 20px 40px rgba(0, 0, 0, 0.5);
     }
 
+    .modal.wide {
+        max-width: 780px;
+    }
+
 </style>
 
 <script>
@@ -36,6 +40,7 @@
     const close = () => dispatch('close');
 
     let modal = {};
+    export let modalClass = '';
     export let zPlane = 0;
 
     const bgStyle = zPlane ? ('z-index: ' + zPlane) : '';
@@ -76,7 +81,7 @@
 
 <div class="modal-background" in:fade out:fade on:click={close} style={bgStyle}></div>
 
-<div class="modal" 
+<div class={'modal' + (modalClass ? ' ' + modalClass : '')}
     role="dialog" 
     aria-modal="true" 
     bind:this={modal} 

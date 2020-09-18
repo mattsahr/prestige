@@ -82,6 +82,14 @@
         z-index: 10;
     }
 
+    .self-marker {
+        width: 20px;
+        height: 40px;
+        background-color: rgb(0, 220, 250);
+        color: rgb(0, 40, 60);
+        padding: 4px;
+    }
+
 </style>
 
 
@@ -106,6 +114,19 @@
     const getPlayer = id => $players.find(player => player._id === id) || DUMMY_PLAYER;
     const getBoardClass = id => $opponentsUX.featuredBoard === id ? 'featured ' : '';
 
+    const getOpponentClass = id => {
+
+        const localPlayerIndex = sortedBoards.findIndex(next => next._id === $localBoard._id);
+        const currentIndex = sortedBoards.findIndex(next => next._id === id);
+        const targeted = 
+            // LOCAL PLAYER IS FIRST -- TARGET THE LAST PLAYER
+            (localPlayerIndex === 0 && currentIndex === sortedBoards.length -1) ||
+            // LOCAL PLAYER TARGETS OPPONENT JUST AHEAD OF SELF
+            (currentIndex === localPlayerIndex  - 1);
+
+        return targeted ? 'targeted' : '';
+    };
+
 
     const clamp = (lowerBound, num, upperBound) => Math.max(
         lowerBound,
@@ -116,19 +137,15 @@
         opponentsUX.feature.show({
             _id: _id,
             source
-            /*
-            {
-                top: rect.top,
-                left: rect.left,
-                width: rect.width,
-                height: rect.height
-            }
-            */
         });
 
+        if (boardStatus === 'show-boards') {
+            setTimeout(opponentsUX.toggleShowOpponents, 160);
+        }
     };
 
-/*    const boardStatusUpdate = (() => {
+    /*
+    const boardStatusUpdate = (() => {
         let showBoards = false;
 
         return () => {
@@ -145,15 +162,13 @@
             return showBoards ? 'show-boards' : 'minified';
         };
     })();
-*/  
+    */  
+
     const getMin = () => Math.min(getDocWidth(), getDocHeight());
-    const getFeaturedId = (opponentsUX) => {
-        console.log('opponentsUX', opponentsUX);
-        return false;
-    };
 
     const sliderPadding = 6;
-    $: opponents = $boards.filter(isOpponent).sort(sortBoards($scores)).reverse();
+    $: sortedBoards = $boards.sort(sortBoards($scores)).reverse();
+    $: opponents = sortedBoards.filter(isOpponent);
     $: wrapperClass = 'opponents-section' + 
         (opponents.length ? '' : ' empty') + (' count_' + opponents.length) +
         ($opponentsUX.showBoards ? ' show-boards' : '');
@@ -177,7 +192,7 @@
         {#each [wrapperClass] as count (wrapperClass)} <!-- HACK TO RE-RENDER -->
             <Swipe featureNextBoard={featureNextBoard} itemWidth={currentWidth || 140} >
                 {#each opponents as board}
-                    <SwipeItem>
+                    <SwipeItem classes={getOpponentClass(board._id)}>
                         <div class="opponent">
                             <PlayerInfo 
                                 tabFeatured={board._id === currentFeaturedId}

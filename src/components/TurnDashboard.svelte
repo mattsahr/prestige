@@ -224,7 +224,7 @@
     import MdExpandLess from 'svelte-icons/md/MdExpandLess.svelte';
     import MdInfo from 'svelte-icons/md/MdInfo.svelte';
     import { hydrateTurns, dummyTurn } from '../utility/helpers';
-    import { turns, rosterName } from '../store/store';
+    import { modalUX, turns, rosterName } from '../store/store';
     import Dice from './Dice.svelte';
 
     export let dashboardState = { open: false };
@@ -341,11 +341,11 @@
    const createTooltip = description => ({
         content: ' ',
         placement: 'top',
-        trigger: 'click',
+        // trigger: 'click',
         onShow: instance => {
             instance.setProps({content: createTooltipContent(description)});
         },
-        delay: [0, 200],
+        delay: [250, 250],
         theme: 'light',
         animation: 'shift-away'
     });
@@ -362,6 +362,10 @@
         if (DOM.wrapper) { 
             DOM.turnNumber = DOM.wrapper.querySelector('.turn-number');
         }
+    };
+
+    const toggleTurnOverview = () => {
+        modalUX.showTurnOverview();
     };
 
     onMount(init);
@@ -385,7 +389,9 @@
                         <span class="turn-number">{currentView.turn}</span> 
 
                         {#each [currentIndex] as count (currentIndex)}
-                            <div class="info-bug" use:tippy={createTooltip(currentView.description)} >
+                            <div class="info-bug" 
+                                use:tippy={createTooltip(currentView.description)}
+                                on:click={toggleTurnOverview} >
                                 <MdInfo />
                             </div>
                         {/each}

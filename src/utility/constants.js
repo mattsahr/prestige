@@ -126,7 +126,8 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'Union Carbide Corporation V. Union Of India & Others.<br/>December 2, 1984 -- Bhopal, India',
-            description: 'Remove contiguous <span class="INDUSTRY">INDUSTRY</span> squares from opponent, up to yellow die max.'
+            description: 'Remove contiguous <span class="INDUSTRY">INDUSTRY</span> squares from opponent, up to yellow die max.',
+            description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
         },
         {
             era_id: 'AE',
@@ -140,7 +141,8 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'The fire was barely fifteen minutes old. What followed was a series of fatal errors that set the fire free and doomed the city to a fiery death.',
-            description: 'Remove contiguous <span class="RESIDENTIAL">RESIDENTIAL</span> squares from opponent, up to red die max.'
+            description: 'Remove contiguous <span class="RESIDENTIAL">RESIDENTIAL</span> squares from opponent, up to red die max.',
+            description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
         },
         {
             era_id: 'AF',
@@ -168,7 +170,7 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'Before there were “selfies,” there was Me.',
-            description: 'Any two contiguous squares of one color.'
+            description: 'Automatic 2 on all dice.'
         },
         {
             era_id: 'AH',
@@ -207,7 +209,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: { active: true, min: 1, max: 2 }
             },
             comment: 'Stagflation is a very unpopular buzz word in the business world',
-            description: 'Any type, 3 or less on the dice.'
+            description: 'Any type, 2 or less on the dice.'
         },
         {
             era_id: 'AL',
@@ -265,14 +267,14 @@ export const ERA_META = (() => {
             era_id: 'AP',
             era: 'Pandemic',
             rules: {
-                COMMERCE:    standard,
+                COMMERCE:    X,
                 CULTURE:     standard,
-                INDUSTRY:    X,
+                INDUSTRY:    standard,
                 PARKS:       standard,
                 RESIDENTIAL: X
             },
             comment: 'This is a pandemic. I felt it was a pandemic long before it was called a pandemic.',
-            description: 'No <span class="INDUSTRY">INDUSTRY</span> or <span class="RESIDENTIAL">RESIDENTIAL</span>.'
+            description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="RESIDENTIAL">RESIDENTIAL</span>.'
         },
         {
             era_id: 'AQ',

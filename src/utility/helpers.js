@@ -19,6 +19,7 @@ import {
 let FB = null;
 let globalData = null;
 const dummyArray = [];
+const dummyObject = {};
 
 export const getLocalHash = () => globalData ? globalData.localPlayerHashId : '';
 export const composeLocalId = name => name + SPACER + getLocalHash();
@@ -158,25 +159,43 @@ export const initHelpers = (sourceFB, sourceGlobalData) => {
 };
 
 
-export  const sortBoards = scores => (A, B) => {
-    if (!A || !B || !A._id || !B._id || !scores[A._id] || !scores[B._id]) {
-        return 0;
-    } 
+export  const sortBoards = (() => {
 
-    if (scores[A._id].total <  scores[B._id].total)  {
-        return -1;
-    }
-    if (scores[A._id].total > scores[B._id].total)  {
-        return 1;
-    }
-    if (scores[A._id].population < scores[B._id].population)  {
-        return -1;
-    }
-    if (scores[A._id].population > scores[B._id].population)  {
-        return 1;
-    }
-    return 0;
-};
+    const compare = (scores, A, B, feature) => {
+        if (scores[A._id][feature] < scores[B._id][feature])  {
+            return -1;
+        }
+        if (scores[A._id][feature] > scores[B._id][feature])  {
+            return 1;
+        }
+        return 0;
+    };
+
+    const features = [
+        'total',
+        'population',
+        'bonus',
+        'happiness',
+        'culture',
+        'wealth',
+        '_id'
+    ];
+
+    return scores => (A, B) => {
+        if (!A || !B || !A._id || !B._id || !scores[A._id] || !scores[B._id]) {
+            return 0;
+        } 
+
+        for (const feature of features) {
+            if (compare(scores, A, B, feature)) {
+                return compare(scores, A, B, feature);
+            }
+        }
+
+        return 0;
+    };
+
+})();
 
 const randomInt = (min, max) => {  
     const Min = Math.ceil(min); 
@@ -288,6 +307,7 @@ export const updateTurns = (() => {
         return {
             played,
             sideboard: sourceEras,
+            priorUnplayed: sideboard,
             deck: newDeck
         };
     };
@@ -297,7 +317,7 @@ export const updateTurns = (() => {
             return shuffle();
         }
 
-        const { deck, played, sideboard } = currentTurns.deck.length === 0
+        const { deck, played, sideboard, priorUnplayed } = currentTurns.deck.length === 0
             ? shuffle(currentTurns)
             : _cloneDeep(currentTurns);
 
@@ -307,11 +327,21 @@ export const updateTurns = (() => {
         const nextTurn = rollDice(nextEraId);
         played.push(nextTurn);
 
-        return {
-            deck,
+        const nextShuffle = deck.length === 0 
+            ? shuffle({deck, played, sideboard, priorUnplayed})
+            : dummyObject;
+
+        const delivery = {
+            deck: nextShuffle.deck || deck,
             played,
-            sideboard 
+            sideboard: nextShuffle.sideboard || sideboard
         };
+
+        if (nextShuffle.priorUnplayed || priorUnplayed) {
+            delivery.priorUnplayed = nextShuffle.priorUnplayed || priorUnplayed;
+        }
+
+        return delivery;
     };
 
     return advance;

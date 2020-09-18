@@ -21,6 +21,11 @@
         padding: 0 10px 0 0;
     }
 
+    .player.local-self .player-name {
+        font-weight: bold;
+        color: rgb(230, 100, 0);
+    }
+
     .player-score {
         text-align: right;
         width: 56px;
@@ -96,24 +101,32 @@
 
         console.log('viewPlayer!', name);
 
-        opponentsUX.feature.show({_id});
-        handleDrawerClose();
+        if (_id === $localBoard._id) {
+            opponentsUX.feature.close();
+            handleDrawerClose();
+        } else {
+            opponentsUX.feature.show({_id});
+            handleDrawerClose();
+        }
+
     };
 
     const onchage = ({ detail }) => {
         console.log(detail.expanded ? 'open' : 'close', detail.name);
     };
 
-    $: opponents = $players.filter(isOpponent)
+    $: allPlayers = $players // .filter(isOpponent)
         .filter(player => $scores[player._id])
         .sort(sortBoards($scores)).reverse();
+
+    const getPlayerClass = player => 'player' + (isOpponent(player) ? '' : ' local-self');
 
 </script>
 
 <ExpansionPanel name="Players" dense on:change={onchage}>
 
-    {#each opponents as player}
-        <div class="player">
+    {#each allPlayers as player}
+        <div class={getPlayerClass(player)}>
             <div class="player-name">{player.name}</div>
             <div class="player-score">{$scores[player._id].total}</div>
             <div class="button-group">

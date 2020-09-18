@@ -64,6 +64,8 @@
     import PlayerList from './PlayerList.svelte';
     import NextTurn from './NextTurn.svelte';
     import ThemeSwitcher from './ThemeSwitcher.svelte';
+    import LatestTurn from './LatestTurn.svelte';
+    import Rules from './Rules.svelte';
 
     const DOM = { wrapper: null };
 
@@ -100,6 +102,8 @@
         <GoalList />
         <PlayerList handleDrawerClose={handleDrawerClose} />
         <ThemeSwitcher group={$adminUX.theme} />
+        <LatestTurn handleDrawerClose={handleDrawerClose} />
+        <Rules handleDrawerClose={handleDrawerClose} />
     </div>
 
     <div class="background" in:fade out:fadeOut on:click={handleDrawerClose}></div>

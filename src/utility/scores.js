@@ -130,6 +130,7 @@ export const calculateScore = board => {
 
     score.bonus = board.bonus || 0;
     score.total = getSum(score);
+    score._id = board._id;
 
     return score;
 };

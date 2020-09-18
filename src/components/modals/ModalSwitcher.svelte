@@ -5,6 +5,9 @@
     import GoalPanel from '../GoalPanel.svelte';
     import CreateGameDialog from '../CreateGameDialog.svelte';
     import ConfirmRemovePlayer from './ConfirmRemovePlayer.svelte';
+    import TurnOverview from './TurnOverview.svelte';
+    import TurnState from './TurnState.svelte';
+    import Rules from './RulesPage.svelte';
 
     $: showIntro = $modalUX.initPlayer.show;
     $: exitedGame = $modalUX.initPlayer.exitedGame || '';
@@ -13,6 +16,9 @@
     $: warnNameChange = $modalUX.warnNameChange.show;
     $: confirmPlayerRemove = $modalUX.confirmPlayerRemove.show;
     $: chooseGoals = $modalUX.chooseGoals.show;
+    $: viewTurns = $modalUX.viewTurns.show;
+    $: viewRules = $modalUX.viewRules.show;
+    $: viewTurnState = $modalUX.turnState.show;
 
     const handlePlayOffline = () => {
         modalUX.set({
@@ -55,6 +61,34 @@
         });
     };
 
+    const handleCloseTurnViewer = () => {
+        modalUX.set({
+            ...$modalUX,
+            viewTurns: {
+                show: false
+            }
+        });
+    };
+
+    const handleCloseRulesViewer = () => {
+        modalUX.set({
+            ...$modalUX,
+            viewRules: {
+                show: false
+            }
+        });
+    };
+
+    const handleCloseTurnState = () => {
+        modalUX.set({
+            ...$modalUX,
+            turnState: {
+                 ...$modalUX.turnState,
+                show: false
+            }
+        });
+    };
+
 </script>
 
 {#if showIntro}
@@ -89,5 +123,29 @@
 {#if chooseGoals}
     <Modal>
         <GoalPanel modal={true} handleCloseGoalChooser={handleCloseGoalChooser} />
+    </Modal>
+{/if}
+
+{#if viewTurns}
+    <Modal modalClass="wide" on:close={handleCloseTurnViewer}>
+        <TurnOverview modal={true} handleClosePanel={handleCloseTurnViewer} />
+    </Modal>
+{/if}
+
+{#if viewRules}
+    <Modal modalClass="wide" on:close={handleCloseRulesViewer}>
+        <Rules modal={true} handleClosePanel={handleCloseRulesViewer} />
+    </Modal>
+{/if}
+
+{#if viewRules}
+    <Modal modalClass="wide" on:close={handleCloseRulesViewer}>
+        <Rules modal={true} handleClosePanel={handleCloseRulesViewer} />
+    </Modal>
+{/if}
+
+{#if viewTurnState}
+    <Modal on:close={handleCloseTurnState}>
+        <TurnState handleClosePanel={handleCloseTurnState} />
     </Modal>
 {/if}

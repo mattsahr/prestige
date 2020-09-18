@@ -111,7 +111,11 @@ const network = (() => {
             FB.collection('roster').doc(rosterName).delete();
         },
         update: (updatedRoster, localPlayer) => { if (localPlayer._id === DUMMY_ID) { return; }
-            console.log('NETWORK roster.update', updatedRoster);
+            // console.log('NETWORK roster.update', updatedRoster);
+            if (!updatedRoster.turns.priorUnplayed) {
+                delete updatedRoster.turns.priorUnplayed;
+            }
+
             roster.watch(updatedRoster.name);
             FB.collection('roster').doc(updatedRoster.name)
                 .set(updatedRoster);

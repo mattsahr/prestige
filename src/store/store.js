@@ -9,6 +9,7 @@ import {
     ZERO_SCORE, 
     STARTING_SCORE 
 } from '../utility/constants';
+import modalUXStore from './modal-ux-store';
 import { 
     composeBaseGameState, 
     boardState, 
@@ -22,6 +23,8 @@ import {
 import { calculateScore } from '../utility/scores';
 import { get as storeGet } from 'svelte/store';
 import network from '../utility/network';
+
+export const modalUX = modalUXStore;
 
 const createGameStore = () => {
     const { subscribe, set, update } = writable({});
@@ -65,7 +68,7 @@ const createGameStore = () => {
                         // can't be kicked out til you've joined.
                         return false;
                     }
-                    const localPlayer = player.getLocal();
+                    const localPlayer = PLAYER.getLocal();
                     const kickedOut = !networkRosterState.players.includes(localPlayer._id);
                     if (kickedOut) {
                         globalReset();
@@ -77,7 +80,7 @@ const createGameStore = () => {
 
                 const removeOrphans = networkPlayers => {
 
-                    const localPlayer = player.getLocal();
+                    const localPlayer = PLAYER.getLocal();
                     const toRemove = {};
 
                     for (const player of gameState.players) {
@@ -92,7 +95,7 @@ const createGameStore = () => {
                 };
 
                 const addNewPlayers = networkPlayers => {
-                    const localPlayer = player.getLocal();
+                    const localPlayer = PLAYER.getLocal();
 
                     console.log('gameStore roster addNewPlayers', networkPlayers);
                     
@@ -113,7 +116,7 @@ const createGameStore = () => {
 
                 const confirmJoined = (networkRosterState) => {
                     const { players } = networkRosterState;
-                    const localPlayer = player.getLocal();
+                    const localPlayer = PLAYER.getLocal();
                     if (players.includes(localPlayer._id)) {
                         gameState.joined = true;
                     } else {
@@ -132,9 +135,16 @@ const createGameStore = () => {
                     return gameState.rosterName === networkRosterState.name;
                 };
 
-                return (networkRosterState) => {
+                const checkTurnAdvanced = networkRosterState => {
+                    const localTurns = gameState.turns 
+                        ? gameState.turns.played.length
+                        : 0;
+                    const networkTurns = networkRosterState.turns.played.length;
 
-                    console.log('gameStore fromNetwork update roster', networkRosterState);
+                    return networkTurns > localTurns ? localTurns : false;
+                };
+
+                return (networkRosterState) => {
 
                     if (!checkRoster(networkRosterState)) {
                         return;
@@ -143,6 +153,7 @@ const createGameStore = () => {
                     if (checkSelfKickedOut(networkRosterState)) {
                         return;
                     }
+                    const turnAdvanced = checkTurnAdvanced(networkRosterState);
 
                     gameState.networkRosterState = _cloneDeep(networkRosterState);
                     gameState.rosterName = networkRosterState.name;
@@ -156,6 +167,10 @@ const createGameStore = () => {
 
                     modalUX.closeRosterModals();
                     updateGame();
+
+                    if (turnAdvanced) {
+                        modalUX.notifyTurn(gameState.turns);
+                    }
                 };
             })()
         },
@@ -175,7 +190,7 @@ const createGameStore = () => {
                     gameState.boards.push(board);
                 }
 
-                score.update(board._id);
+                SCORE.update(board._id);
                 updateGame();
             }
         },
@@ -212,28 +227,35 @@ const createGameStore = () => {
 
         board: {
             update: board => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.board.update(board, localPlayer);
             },
             watchStop: boardId => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.board.watchStop(boardId, localPlayer);
+            },
+            watchAndPing: boardId => {
+                const localPlayer = PLAYER.getLocal();
+                network.board.watch(boardId);
+                setTimeout(() => {
+                    network.board.ping(boardId, localPlayer);
+                }, 100);
             }
         },
 
         roster: {
             pingToJoin: newRosterName => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.roster.watchStop(gameState.rosterName);
                 network.roster.ping(newRosterName, localPlayer);
             },
             update: rosterData => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.roster.update(rosterData, localPlayer);
                 console.log('STORE sendToNetwork roster update!', rosterData.name, rosterData);
             },
             actuallyJoin: (rosterData) => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 if (rosterData.banned && rosterData.banned.includes(localPlayer._id)) {
                     // not allowed to join
 
@@ -249,7 +271,7 @@ const createGameStore = () => {
             removePlayer: (rosterData, playerToRemove) => {
                 console.error('sendToNetwork.roster.removePlayer() NOT IN USE');
                 console.log('roster', rosterData, '  attempted to remove', playerToRemove);
-                // const localPlayer = player.getLocal();
+                // const localPlayer = PLAYER.getLocal();
                 // network.roster.update(roster, localPlayer); 
             },
 
@@ -263,22 +285,22 @@ const createGameStore = () => {
                 }                
             },
             create: rosterData => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.roster.update(rosterData, localPlayer);
             },
-            watchStop: rostername => {
-                const localPlayer = player.getLocal();
+            watchStop: rosterName => {
+                const localPlayer = PLAYER.getLocal();
                 network.roster.watchStop(rosterName, localPlayer);
             }
         },
 
         player: {
             update: newPlayer => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.player.update(newPlayer, localPlayer);
             },
             removeLocal: oldPlayer => { 
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.player.remove(oldPlayer._id, localPlayer); 
                 network.board.remove(oldPlayer._id, localPlayer);
             },
@@ -286,12 +308,12 @@ const createGameStore = () => {
                 console.error('sendToNetwork.player.remove() NOT IN USE');
                 console.log('Attemtped to remove:', player);
                 // sendToNetwork.roster();
-                // const localPlayer = player.getLocal();
+                // const localPlayer = PLAYER.getLocal();
                 // network.player.remove(oldPlayer._id, localPlayer); 
                 // network.board.remove(oldPlayer._id, localPlayer);
             },
             watchStop: playerId => {
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 network.player.watchStop(playerId, localPlayer);
             }
         }
@@ -333,7 +355,7 @@ const createGameStore = () => {
     };
 
 
-    const board = {
+    const BOARD = {
         remove: id => {
             gameState.boards = gameState.boards.filter(board => board._id !== id);
         },
@@ -341,13 +363,20 @@ const createGameStore = () => {
             return gameState.boards
                 .find(board => board._id === gameState.___localPlayerId);
         },
+        postJoinUpdate: () => {
+            setTimeout(() => {
+                const localBoard = BOARD.getLocal();
+                console.log('postJoinUpdate', localBoard._id, localBoard);
+                sendToNetwork.board.update(localBoard);
+            }, 1500);
+        },
         update: (playerId, plotId, plotType, option) => {
             console.log('updateBoard', plotId, plotType);
 
             const board = gameState.boards.find(board => board._id === playerId);
             board.state = boardState.update(board.state, plotId, plotType);
 
-            score.update(playerId);
+            SCORE.update(playerId);
 
             updateGame();
 
@@ -360,7 +389,7 @@ const createGameStore = () => {
             const board = gameState.boards.find(board => board._id === id);
             board.bonus = num;
 
-            score.update(id);
+            SCORE.update(id);
             updateGame();
 
             if (option !== NETWORK.FROM_NETWORK) {
@@ -369,7 +398,7 @@ const createGameStore = () => {
         }
     };
 
-    const roster = {
+    const ROSTER = {
         reset: option => {
             for (const key of Object.keys(gameState.scores)) {
                 gameState.scores[key] = {...ZERO_SCORE};
@@ -390,15 +419,15 @@ const createGameStore = () => {
                 gameState.rosterName = rosterName;
                 gameState.rosterJoined = false;
 
-                const localPlayer = player.getLocal();
+                const localPlayer = PLAYER.getLocal();
                 sendToNetwork.player.update(localPlayer);
 
                 sendToNetwork.roster.pingToJoin(rosterName);
             }
         },
         create: rosterName => {
-            const localPlayer = player.getLocal();
-            const localBoard = board.getLocal();
+            const localPlayer = PLAYER.getLocal();
+            const localBoard = BOARD.getLocal();
             const newRoster = {
                 name: rosterName,
                 players: [ gameState.___localPlayerId ],
@@ -422,7 +451,7 @@ const createGameStore = () => {
         }
     };
 
-    const player = {
+    const PLAYER = {
         updateLocal: (() => {
 
             const getLocalPlayerByHash = () => gameState.players
@@ -440,15 +469,15 @@ const createGameStore = () => {
             const removeLocalPlayer = oldPlayer => {
                 // const oldPlayer = _cloneDeep(player);
                 sendToNetwork.player.removeLocal(oldPlayer);
-                board.remove(oldPlayer._id);
+                BOARD.remove(oldPlayer._id);
 
-                score.remove(oldPlayer._id);            
+                SCORE.remove(oldPlayer._id);            
             };
 
             return (playerName, cityName, rosterName) => {
 
                 /*
-                console.group('STORE >> player.updateLocal');
+                console.group('STORE >> PLAYER.updateLocal');
                 console.log('playerName', playerName);
                 console.log('cityName', cityName);
                 console.log('rosterName', rosterName);
@@ -488,12 +517,16 @@ const createGameStore = () => {
                 if (!board) {
                     board = composeNewBoard(player._id);
                     gameState.boards.push(board);
-                    sendToNetwork.board.update(board);
+                    sendToNetwork.board.watchAndPing(board._id);
+                    BOARD.postJoinUpdate();
+
+                    // THIS OPTION NUKES THE BOARD BACK TO BASELINE
+                    // sendToNetwork.board.update(board);
                 }
 
                 gameState.scores[player._id] = calculateScore(board);
 
-                roster.join(rosterName);
+                ROSTER.join(rosterName);
 
 
                 updateGame();
@@ -509,8 +542,8 @@ const createGameStore = () => {
         getLocal: () => gameState.players
             .find(player => player._id === gameState.___localPlayerId),
         remove: (playerToRemove) => {
-            board.remove(playerToRemove._id);
-            score.remove(playerToRemove._id);
+            BOARD.remove(playerToRemove._id);
+            SCORE.remove(playerToRemove._id);
             gameState.players = gameState.players
                 .filter(nextPlayer => nextPlayer._id !== playerToRemove._id);
 
@@ -531,7 +564,7 @@ const createGameStore = () => {
         }
     };
 
-    const score = {
+    const SCORE = {
         remove: id => {
             delete gameState.scores[id];
         },
@@ -541,7 +574,7 @@ const createGameStore = () => {
         }
     };
 
-    const goals = {
+    const GOALS = {
         generateRandom: () => {
             const { goalCodes } = getRandomGoals();
             gameState.goals = goalCodes;
@@ -561,11 +594,11 @@ const createGameStore = () => {
     };
 
     return {
-        roster, // create, reset
-        board, // update, updateBonus
-        player, // update
-        score,
-        goals,
+        roster: ROSTER, // create, reset
+        board: BOARD, // update, updateBonus
+        player: PLAYER, // update
+        score: SCORE,
+        goals: GOALS,
 
         get,
         set,
@@ -665,74 +698,7 @@ const createTurnStore = () => {
 
 export const turns = createTurnStore();
 
-const createModalStore = () => {
-    const {subscribe, set, update } = writable({
-        // GAME CREATION MODALS
-        initPlayer: { show: true },
-        createGame: {
-            show: false,
-            rosterName: ''
-        },
-        chooseGoals: { show: false },
-        // OTHER MODALS
-        warnNameChange: { show: false },
-        exitGame: { show: false },
-        confirmPlayerRemove: { show: false }
-    });
 
-    let UX;
-    subscribe(ux => UX = ux);
-
-    const alertExit = exitedGame => {
-        const updated = _cloneDeep(UX);
-        updated.initPlayer = { 
-            show: true,
-            exitedGame
-        };
-        set(updated);
-    };
-
-    const closeRosterModals = () => {
-        const updated = _cloneDeep(UX);
-        updated.initPlayer.show = false;
-        updated.createGame.show = false;
-        updated.chooseGoals.show = false;
-        set(updated);
-    };
-
-    const showConfirmPlayerRemove = (_id, name) => {
-        const updated = _cloneDeep(UX);
-        updated.confirmPlayerRemove = {
-            show: true,
-            _id: _id,
-            name: name
-        };
-        set(updated);
-    };
-
-    const chooseGoals = (rosterName) => {
-        const updated = _cloneDeep(UX);
-        updated.initPlayer.show = false;
-        updated.createGame.show = false;
-
-        updated.chooseGoals.show = true;
-        updated.chooseGoals.rosterName = rosterName;
-        set(updated);
-    };
-
-    return {
-        closeRosterModals,
-        showConfirmPlayerRemove,
-        chooseGoals,
-        alertExit,
-
-        subscribe,
-        set,
-        update
-    };
-};
-
-export const modalUX = createModalStore();
 
 const createOpponentsStore = () => {
     const {subscribe, set, update } = writable({
