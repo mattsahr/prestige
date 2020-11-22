@@ -6,6 +6,7 @@
 /__sapper__/build/
 /__sapper__/dev/
 /functions/node_modules/
+/devNotes/
 
 yarn-error.log
 serviceAccountKey.json

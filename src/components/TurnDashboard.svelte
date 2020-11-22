@@ -11,14 +11,14 @@
         position: relative;
         color: rgba(220, 220, 220);
         overflow: hidden;
-        height: 266px;
+        height: 282px;
         transition: height 400ms;
         border-radius: 4px 4px 0 0;
         z-index: 10;
     }
 
     .turn-dashboard.target-button-active {
-        height: 360px;
+        height: 376px;
     }
 
     .turn-dashboard.closed,
@@ -55,6 +55,7 @@
         padding: 2px 0 10px 0;
         margin-right: -0.2vmin;
         margin-bottom: -20px;
+        transition: margin 400ms;
     }
 
     .closed .navigator {
@@ -188,12 +189,12 @@
 
     .main-info {
         overflow: hidden;
-        height: 96px;
+        height: 112px;
         transition: height 400ms;
     }
 
     .target-button-active .main-info {
-        height: 186px;
+        height: 202px;
     }
 
     .main-info.comments {
@@ -205,6 +206,7 @@
         display: flex;
         font-weight: bold;
         transition: opacity 400ms;
+        padding: 16px 0 0 0;
     }
 
     .comment {
