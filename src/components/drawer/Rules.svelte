@@ -41,11 +41,6 @@
         background: rgb(255, 255, 255);
     }
 
-    .drawer-button:hover .next-icon {
-        color: rgb(246, 140, 0);
-    }
-
-
 </style>
 
 <script>

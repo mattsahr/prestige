@@ -1,14 +1,4 @@
 <style>
-    .goal-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        height: 60px;
-        border: solid rgb(240, 230, 210);
-        border-width: 0 0 1px 0;
-    }
-
     .goal-panel {
         margin: -8px 0 0 0;
     }
