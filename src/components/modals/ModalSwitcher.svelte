@@ -2,9 +2,10 @@
     import { modalUX } from '../../store/store';
     import Modal from './Modal.svelte';
     import PlayerForm from '../PlayerForm.svelte';
-    import GoalPanel from '../GoalPanel.svelte';
-    import CreateGameDialog from '../CreateGameDialog.svelte';
+    import GoalPanel from './GoalPanel.svelte';
+    import CreateGameDialog from './CreateGameDialog.svelte';
     import ConfirmRemovePlayer from './ConfirmRemovePlayer.svelte';
+    import ConfirmGameRosterReset from './ConfirmGameRosterReset.svelte';
     import TurnOverview from './TurnOverview.svelte';
     import TurnState from './TurnState.svelte';
     import Rules from './RulesPage.svelte';
@@ -15,6 +16,7 @@
     $: createGameName = $modalUX.createGame.rosterName;
     $: warnNameChange = $modalUX.warnNameChange.show;
     $: confirmPlayerRemove = $modalUX.confirmPlayerRemove.show;
+    $: confirmGameRosterReset = $modalUX.confirmGameRosterReset.show;
     $: chooseGoals = $modalUX.chooseGoals.show;
     $: viewTurns = $modalUX.viewTurns.show;
     $: viewRules = $modalUX.viewRules.show;
@@ -47,6 +49,15 @@
             ...$modalUX,
             confirmPlayerRemove: {
                 ...$modalUX.confirmPlayerRemove,
+                show: false
+            }
+        });
+    };
+
+    const handleCloseGameResetter = () => {
+        modalUX.set({
+            ...$modalUX,
+            confirmGameRosterReset: {
                 show: false
             }
         });
@@ -117,6 +128,12 @@
 {#if confirmPlayerRemove}
     <Modal on:close={handleClosePlayerRemover}>
         <ConfirmRemovePlayer handleClosePlayerRemover={handleClosePlayerRemover} />
+    </Modal>
+{/if}
+
+{#if confirmGameRosterReset}
+    <Modal on:close={handleCloseGameResetter}>
+        <ConfirmGameRosterReset handleCloseGameResetter={handleCloseGameResetter} />
     </Modal>
 {/if}
 

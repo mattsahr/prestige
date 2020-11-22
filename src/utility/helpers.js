@@ -346,7 +346,38 @@ export const updateTurns = (() => {
 
     return advance;
 })(); 
-  
+
+export const getTargetPlayerId = (() => {
+
+    const getTargetID = (boards, localBoardID) => {
+
+        const localPlayerIndex = boards.findIndex(next => next._id === localBoardID);
+
+        console.log('helper localPlayerIndex', localPlayerIndex);
+        console.log('sortedBoards', boards);
+        console.log('sortedBoards[localPlayerIndex - 1]', boards[localPlayerIndex - 1]);
+
+        if (localPlayerIndex === 0) {
+            return boards[boards.length - 1]._id;
+        }
+
+        return boards[localPlayerIndex - 1]._id;
+    };
+
+    return (boards, scores, localBoardID) => {
+
+        if (boards.length === 1) {
+            return '';
+        }
+
+        const sorted = [...boards].sort(sortBoards(scores)).reverse();
+
+        console.log('helpers getTargetPlayerId', sorted, scores, localBoardID);
+
+        return getTargetID(sorted, localBoardID);
+    };
+
+})(); 
 
 export const serializeGoals = goals => 
     goals.map(goal => goal.code).join(SPACER);

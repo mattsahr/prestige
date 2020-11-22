@@ -51,7 +51,7 @@
 
 
 {#if goalsObject && goalsObject.length}
-    <ExpansionPanel dense name="Bonus Goals">
+    <ExpansionPanel dense name="Bonus Goals" class="bonus-panel">
         <div class="goal-panel">
             {#each goalsObject as goal}
                 <div class="goals-section">

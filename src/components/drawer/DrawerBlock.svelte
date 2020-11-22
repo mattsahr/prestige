@@ -63,9 +63,10 @@
     import GoalList from './GoalList.svelte';
     import PlayerList from './PlayerList.svelte';
     import NextTurn from './NextTurn.svelte';
+    import ResetGame from './ResetGame.svelte';
     import ThemeSwitcher from './ThemeSwitcher.svelte';
-    import LatestTurn from './LatestTurn.svelte';
     import Rules from './Rules.svelte';
+    import VolumeSlider from './VolumeSlider.svelte';
 
     const DOM = { wrapper: null };
 
@@ -92,6 +93,8 @@
 
     onMount(init);
 
+    //  <LatestTurn handleDrawerClose={handleDrawerClose} />
+
 </script>
 
 <div class="drawer-wrapper" bind:this={DOM.wrapper}>
@@ -102,8 +105,9 @@
         <GoalList />
         <PlayerList handleDrawerClose={handleDrawerClose} />
         <ThemeSwitcher group={$adminUX.theme} />
-        <LatestTurn handleDrawerClose={handleDrawerClose} />
         <Rules handleDrawerClose={handleDrawerClose} />
+        <VolumeSlider />
+        <ResetGame handleDrawerClose={handleDrawerClose} />
     </div>
 
     <div class="background" in:fade out:fadeOut on:click={handleDrawerClose}></div>

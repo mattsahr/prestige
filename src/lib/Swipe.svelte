@@ -46,6 +46,7 @@
     export let itemHeight = 0;
     export let swipeClass = '';
     export let featureNextBoard = false;
+    export let showBoards = false;
 
     let swipeHandler;
     let itemCount = 0;
@@ -201,7 +202,8 @@
 
     const doubleClickHandler = e => {
 
-        if (featureNextBoard) {
+        if (featureNextBoard && !showBoards) {
+            // Don't do doubleClicks when boards are open
 
             const players = swipeWrapper.querySelectorAll('.player-info');
             const X = e.pageX;

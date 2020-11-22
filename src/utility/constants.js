@@ -99,6 +99,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'What is it good for?  Industry.',
+            comment2: 'We must guard against the acquisition of unwarranted influence, whether sought or unsought, by the military-industrial complex. -Dwight Eisenhower',
             description: '<span class="INDUSTRY">INDUSTRY</span> only.'
         },
         {
@@ -112,6 +113,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'Gizmos shall save us.  Also Cloud, Artificial Intelligence, Windmills, Lasers, and The Bitcoin.',
+            comment2: 'Once a new technology rolls over you, if you’re not part of the steamroller, you’re part of the road. – Stewart Brand',
             description: '<span class="COMMERCE">COMMERCE</span> and <span class="INDUSTRY">INDUSTRY</span> only.'
         },
         {
@@ -126,8 +128,10 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'Union Carbide Corporation V. Union Of India & Others.<br/>December 2, 1984 -- Bhopal, India',
-            description: 'Remove contiguous <span class="INDUSTRY">INDUSTRY</span> squares from opponent, up to yellow die max.',
-            description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
+            comment2: 'At 1.24 am on 26 April 1986 Chernobyl’s Unit 4 reactor exploded after staff disabled safety systems and performed an ill-advised experiment to check–ironically enough–the reactor’s safety. ― Mark Lynas',
+            description: 'Remove contiguous <span class="INDUSTRY">INDUSTRY</span> squares from opponent\'s city, up to yellow die max.',
+            targetPlayer: true
+            // description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
         },
         {
             era_id: 'AE',
@@ -141,8 +145,10 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'The fire was barely fifteen minutes old. What followed was a series of fatal errors that set the fire free and doomed the city to a fiery death.',
-            description: 'Remove contiguous <span class="RESIDENTIAL">RESIDENTIAL</span> squares from opponent, up to red die max.',
-            description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
+            comment2: 'The Conflagration was so universal, & the people so astonish’d, that from the beginning, they hardly stirr’d to quench it, so as there was nothing heard or seene but crying out & lamentation, & running about like distracted creatures. - John Evelyn speaking of the Great Fire of London.',
+            description: 'Remove contiguous <span class="RESIDENTIAL">RESIDENTIAL</span> squares from opponent\'s city, up to red die max.',
+            targetPlayer: true
+            // description2: 'At the bottom of the screen, target the opponent to the left of your <span class="self-marker"></span> marker.'
         },
         {
             era_id: 'AF',
@@ -156,6 +162,7 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'The people who live in a golden age usually go around complaining how yellow everything looks.',
+            comment2: 'The Golden Age is before us, not behind us. - William Shakespeare',
             description: 'Add one square of each Type.'
         },
         {
@@ -170,6 +177,7 @@ export const ERA_META = (() => {
             },
             showDescription: true,
             comment: 'Before there were “selfies,” there was Me.',
+            comment2: '“Just be yourself” sounds like good advice at first, but what if you’re a jerk? - Jean Twenge',
             description: 'Automatic 2 on all dice.'
         },
         {
@@ -183,6 +191,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'It\'s a recession when your neighbor loses his job; it\'s a depression when you lose yours.',
+            comment2: 'An entire nation, it seemed, was standing in one long breadline, desperate for even the barest essentials. It was a crisis of monumental proportions. It was known as the Great Depression.  -Kathi Appelt',
             description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="CULTURE">CULTURE</span> or <span class="INDUSTRY">INDUSTRY</span>.'
         },
         {
@@ -195,7 +204,9 @@ export const ERA_META = (() => {
                 PARKS:       standard,
                 RESIDENTIAL: standard
             },
-            comment: 'No one saw the recession coming.',
+            comment: 'No one saw the recession coming. - Gordon Ramsey',
+            comment2: 'Never miss out on an opportunity like a good recession. - Jack Welch',
+            comment3: 'The Stock Market predicted nine of the past five recessions. - Paul Samuelson',
             description: 'No <span class="COMMERCE">COMMERCE</span> or <span class="INDUSTRY">INDUSTRY</span>'
         },
         {
@@ -209,6 +220,8 @@ export const ERA_META = (() => {
                 RESIDENTIAL: { active: true, min: 1, max: 2 }
             },
             comment: 'Stagflation is a very unpopular buzz word in the business world',
+            comment2: 'In the mid 1970s, stagflation in the US featured double-digit inflation, 9% unemployment, and a contracting economy.',
+            comment3: 'The stagflation of the 1970s blessed us with damaging wage and price controls and the utterly counterintuitive supply-side notion that cutting taxes would lead to higher tax revenues. - Steven Rattner',
             description: 'Any type, 2 or less on the dice.'
         },
         {
@@ -221,7 +234,8 @@ export const ERA_META = (() => {
                 PARKS:       standard,
                 RESIDENTIAL: standard
             },
-            comment: 'The election of 1824, known as "The Corrupt Bargain," brought an end to this period, and ushered in the troubled presidency of John Quincy Adams.',
+            comment: 'In the “Era of Good Feelings”, America saw economic growth, westward expansion, and a sense of national purpose and a desire for unity among Americans in the aftermath of the War of 1812.',
+            comment2: 'The election of 1824, known as "The Corrupt Bargain," brought an end to this period, and ushered in the troubled presidency of John Quincy Adams.',
             description: 'All Types.'
         },
         {
@@ -235,6 +249,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: '"Ah, but you can\'t turn back the clock. You can\'t go home again. You can\'t stop progress." Yes, you can.',
+            comment2: 'You don\'t have to burn books to destroy a culture. Just get people to stop reading them. - Ray Bradbury',
             description: 'No <span class="CULTURE">CULTURE</span>.'
         },
         {
@@ -248,6 +263,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'Even in the midst of a terrible drought, someone will say, Of course I want it to rain, but not today.',
+            comment2: 'It\'s so dry the trees are bribing the dogs. - Charles Martin',
             description: 'No <span class="PARKS">PARKS</span>.'
         },
         {
@@ -261,6 +277,7 @@ export const ERA_META = (() => {
                 RESIDENTIAL: standard
             },
             comment: 'I think the Baby Boom has enjoyed itself, maybe sometimes a little too much...',
+            comment2: 'From 1941 to 1961, more than 65 million children were born in the United States. At the height of this baby boom, at an average of seven seconds, a child was born.',
             description: '<span class="RESIDENTIAL">RESIDENTIAL</span> only.'
         },
         {
@@ -301,6 +318,8 @@ export const ERA_META = (() => {
                 RESIDENTIAL: X
             },
             comment: 'What we need to understand is, one, that there are market failures; and two, that there are things like asset bubbles and irrational exuberance.',
+            comment2: 'Once a boom is well started, it cannot be arrested. It can only be collapsed. - John Kenneth Galbraith',
+            comment3: 'One of the funny things about the stock market is that every time one person buys, another sells, and both think they are astute. - William Feather',
             description: '<span class="COMMERCE">COMMERCE</span> only.'
         }
     ];
@@ -406,7 +425,7 @@ export const GOAL_SETS = (() => {
             {
                 title: 'The New Economy',
                 objective: 'First to complete your city',
-                rewardEffects: 'Convert up to 4 continguos <span class="INDUSTRY">INDUSTRY</span> to <span class="COMMERCE">COMMERCE</span>',
+                rewardEffects: 'Convert up to 4 continguous <span class="INDUSTRY">INDUSTRY</span> to <span class="COMMERCE">COMMERCE</span>',
                 completionTrigger: true,
                 code: 'CA'
             },
@@ -444,14 +463,14 @@ export const GOAL_SETS = (() => {
             },
             {
                 title: 'Mixed Use Builder',
-                objective: 'At the end of the game',
-                rewardPoints: 'Score one bonus point for each SQUARE of your least populous type',
+                objective: 'At the end of the game <br />have the highest number of squares, of the your least numerous type',
+                rewardPoints: standard,
                 gameEndTrigger: true,
                 code: 'DB'
             },
             {
                 title: 'Global Hub of Finance',
-                objective: 'At the end of the game, <br />largest cluster of <span class="RESIDENTIAL">RESIDENTIAL</span> squares',
+                objective: 'At the end of the game, <br />largest cluster of <span class="COMMERCE">COMMERCE</span> squares',
                 rewardPoints: standard,
                 gameEndTrigger: true,
                 bounsGroup: 'C',
@@ -460,8 +479,8 @@ export const GOAL_SETS = (() => {
             {
 
                 title: 'District Developer',
-                objective: 'At the end of the game',
-                rewardPoints: 'score one bonus point for each CLUSTER of your least populous type of cluster',
+                objective: 'At the end of the game, <br />have the greatest number of clusters, of your least numerous type',
+                rewardPoints: standard,
                 gameEndTrigger: true,
                 code: 'DD'
             },

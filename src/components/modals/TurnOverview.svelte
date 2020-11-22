@@ -16,8 +16,8 @@
     .close-me {
         position: absolute;
         z-index: 10;
-        top: -14px;
-        right: -12px;
+        top: -10px;
+        right: -9px;
         opacity: 1;
         color: rgb(80, 150, 150);
         cursor: pointer;

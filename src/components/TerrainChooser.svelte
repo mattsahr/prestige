@@ -144,26 +144,29 @@
         <div class="label">Empty</div>
     </div>
 
+    <div class={parksClass} data={PARKS} on:click={handleChoice}>
+        <div class="pane" />
+        <div class="label">Parks</div>
+    </div>
+
     <div class={commerceClass} data={COMMERCE} on:click={handleChoice}>
         <div class="pane" />
         <div class="label">Commerce</div>
+    </div>
+
+    <div class={residentialClass} data={RESIDENTIAL} on:click={handleChoice}>
+        <div class="pane" />
+        <div class="label">Residential</div>
     </div>
 
     <div class={cultureClass} data={CULTURE} on:click={handleChoice}>
         <div class="pane" />
         <div class="label">Culture</div>
     </div>
+
     <div class={industryClass} data={INDUSTRY} on:click={handleChoice}>
         <div class="pane" />
         <div class="label">Industry</div>
-    </div>
-    <div class={parksClass} data={PARKS} on:click={handleChoice}>
-        <div class="pane" />
-        <div class="label">Parks</div>
-    </div>
-    <div class={residentialClass} data={RESIDENTIAL} on:click={handleChoice}>
-        <div class="pane" />
-        <div class="label">Residential</div>
     </div>
 
     <div class={blightClass} data={BLIGHT} on:click={handleChoice}>

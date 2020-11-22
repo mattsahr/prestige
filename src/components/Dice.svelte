@@ -7,9 +7,13 @@
             rgb(132 138 144) 50%, 
             rgb(40 46 50) 100%
         );
-        border: solid rgb(0, 80, 130) 4px;
-        border-radius: 2px;
+        /* border: solid rgb(0, 80, 130) 4px;    */
+        border-radius: 4px;
+    }
 
+    .dice-outer-wrapper.theme-turn-modal {
+        background: rgb(40, 80, 100);
+        border: solid rgb(40, 80, 100) 4px;
     }
 
     .dice-wrapper {
@@ -18,13 +22,23 @@
         max-height: 94px;
         min-height: calc(68px + 2vmin);
         position: relative;
-        padding: 0;
-        padding-top: min(2vmin, 10px);
+        padding: 0 0 0 1.5vmin;
+        padding-top: min(3vmin, 10px);
+        border-radius: 3px;
+    }
+
+    .theme-turn-modal .dice-wrapper {
+        background-image: none;
+        height: 10vmin;
+        max-height: 94px;
+        min-height: calc(61px + 2vmin);
+        padding-top: min(0vmin, 10px);
     }
 
     .scene-wrapper {
-        width: 410px;
+        width: 430px;
         margin: 0 auto;
+        height: 60px;
     }
 
     .scene {
@@ -52,6 +66,8 @@
     import tippy from "sveltejs-tippy";
     import rollDice from '../utility/roll-dice-2';
     import { onMount } from 'svelte';
+    import { PLOT_TYPE } from '../utility/constants';
+    import { currentTerrain } from '../store/store';
 
     const numberMap = [
         'dice-zero-error',
@@ -63,6 +79,17 @@
         'show-bottom'
     ];
 
+    const { 
+        BLIGHT,
+        COMMERCE,
+        CULTURE,
+        EMPTY,
+        INDUSTRY,
+        MOUNTAIN,
+        PARKS,
+        RESIDENTIAL
+    } = PLOT_TYPE;
+
     const isTooBig = (number, rules) => (rules.max && (number > rules.max));
     const isTooSmall = (number, rules) => (rules.min && (number < rules.min));
     const inactive = (number, rules) => !rules.active;
@@ -71,12 +98,16 @@
         inactive(number, rules) || isTooBig(number, rules) || isTooSmall(number, rules)
             ? ' inactive' 
             : '';
-    const getDisplayClass = (number, rules) => 'dice-display' + (
-        inactive(number, rules) || isTooBig(number, rules) || isTooSmall(number, rules)
-            ? '' 
-            : ' active'
-        );
+    const getDisplayClass = (number, rules, terrain, current) => { 
+        return 'dice-display' + 
+            (inactive(number, rules) || isTooBig(number, rules) || isTooSmall(number, rules)
+                ? '' 
+                : ' active'
+            ) +
+            (current === terrain ? ' selected' : '');
+    };
 
+    export let theme = '';
 
     export let diceRolls = {
         COMMERCE: 1,
@@ -104,15 +135,17 @@
     };
 
     $: diceDisplayClass = {
-        dice1: getDisplayClass(diceRolls.PARKS, rules.PARKS),
-        dice2: getDisplayClass(diceRolls.COMMERCE, rules.COMMERCE),
-        dice3: getDisplayClass(diceRolls.RESIDENTIAL, rules.RESIDENTIAL),
-        dice4: getDisplayClass(diceRolls.CULTURE, rules.CULTURE),
-        dice5: getDisplayClass(diceRolls.INDUSTRY, rules.INDUSTRY)
+        dice1: getDisplayClass(diceRolls.PARKS, rules.PARKS, PARKS, $currentTerrain),
+        dice2: getDisplayClass(diceRolls.COMMERCE, rules.COMMERCE, COMMERCE, $currentTerrain),
+        dice3: getDisplayClass(diceRolls.RESIDENTIAL, rules.RESIDENTIAL, RESIDENTIAL, $currentTerrain),
+        dice4: getDisplayClass(diceRolls.CULTURE, rules.CULTURE, CULTURE, $currentTerrain),
+        dice5: getDisplayClass(diceRolls.INDUSTRY, rules.INDUSTRY, INDUSTRY, $currentTerrain)
     };
 
     const handleTurnChange = (() => {
+
         let latestTurn = 0;
+
         return current => {
             if (latestTurn !== current) {
                 latestTurn = current;
@@ -120,6 +153,7 @@
             }
             return JSON.stringify(diceRolls);
         };
+
     })();
 
     $: jailbreak = () => handleTurnChange(currentTurn);
@@ -171,15 +205,22 @@
     };
 
     onMount(createLoggers);
+    const wrapperClass = 'dice-outer-wrapper' + (theme ? ' theme-' + theme : '');
 
+    const handleDieClick = e => {
+        const choice = e.currentTarget.getAttribute('data');
+        currentTerrain.set(choice);
+    };
 
 </script>
-<div class="dice-outer-wrapper">
+
+<div class={wrapperClass}>
     <div class="dice-wrapper">
         <div class="scene-wrapper">
             <div class="scene" data-dice-roll={jailbreak()}>
                 <div class={diceDisplayClass.dice1}>
-                    <div class="dice dice-one" use:tippy={createTooltip('PARKS')}>
+                    <div class="dice dice-one" 
+                        data={PARKS} on:click={handleDieClick} use:tippy={createTooltip(PARKS)}>
                         <div class="face face-front">
                             <div class="front-pip-1">&#11044</div>
                             <div class="front-pip-2">&#11044</div>
@@ -219,7 +260,8 @@
                 </div>
 
                 <div class={diceDisplayClass.dice2}>
-                    <div class="dice dice-two" use:tippy={createTooltip('COMMERCE')}>
+                    <div class="dice dice-two" 
+                        data={COMMERCE} on:click={handleDieClick} use:tippy={createTooltip(COMMERCE)}>
                         <div class="face face-front">
                             <div class="front-pip-1">&#11044</div>
                             <div class="front-pip-2">&#11044</div>
@@ -259,7 +301,8 @@
                 </div>
 
                 <div class={diceDisplayClass.dice3}>
-                    <div class="dice dice-three" use:tippy={createTooltip('RESIDENTIAL')}>
+                    <div class="dice dice-three" 
+                        data={RESIDENTIAL} on:click={handleDieClick} use:tippy={createTooltip(RESIDENTIAL)}>
                         <div class="face face-front">
                             <div class="front-pip-1">&#11044</div>
                             <div class="front-pip-2">&#11044</div>
@@ -299,7 +342,8 @@
                 </div>
 
                 <div class={diceDisplayClass.dice4}>
-                    <div class="dice dice-four" use:tippy={createTooltip('CULTURE')}>
+                    <div class="dice dice-four" 
+                        data={CULTURE} on:click={handleDieClick} use:tippy={createTooltip(CULTURE)}>
                         <div class="face face-front">
                             <div class="front-pip-1">&#11044</div>
                             <div class="front-pip-2">&#11044</div>
@@ -339,7 +383,8 @@
                 </div>
 
                 <div class={diceDisplayClass.dice5}>
-                    <div class="dice dice-five" use:tippy={createTooltip('INDUSTRY')}>
+                    <div class="dice dice-five" 
+                        data={INDUSTRY} on:click={handleDieClick} use:tippy={createTooltip(INDUSTRY)}>
                         <div class="face face-front">
                             <div class="front-pip-1">&#11044</div>
                             <div class="front-pip-2">&#11044</div>

@@ -190,22 +190,25 @@
             {#if $opponentsUX.showBoards}<MdExpandMore />{:else}<MdExpandLess />{/if}
         </div>
         {#each [wrapperClass] as count (wrapperClass)} <!-- HACK TO RE-RENDER -->
-            <Swipe featureNextBoard={featureNextBoard} itemWidth={currentWidth || 140} >
-                {#each opponents as board}
-                    <SwipeItem classes={getOpponentClass(board._id)}>
-                        <div class="opponent">
-                            <PlayerInfo 
-                                tabFeatured={board._id === currentFeaturedId}
-                                playerClass={getBoardClass(board._id) + boardStatus}
-                                player={getPlayer(board._id)} 
-                                score={$scores[board._id]} />
-                            <GameBoard 
-                                boardClass={getBoardClass(board._id) + boardStatus}
-                                opponent={true} 
-                                board={board} />
-                        </div>
-                    </SwipeItem>
-                {/each}
+            <Swipe 
+                featureNextBoard={featureNextBoard} 
+                showBoards={$opponentsUX.showBoards} 
+                itemWidth={currentWidth || 140} >
+                    {#each opponents as board}
+                        <SwipeItem classes={getOpponentClass(board._id)}>
+                            <div class="opponent">
+                                <PlayerInfo 
+                                    tabFeatured={board._id === currentFeaturedId}
+                                    playerClass={getBoardClass(board._id) + boardStatus}
+                                    player={getPlayer(board._id)} 
+                                    score={$scores[board._id]} />
+                                <GameBoard 
+                                    boardClass={getBoardClass(board._id) + boardStatus}
+                                    opponent={true} 
+                                    board={board} />
+                            </div>
+                        </SwipeItem>
+                    {/each}
             </Swipe>
         {/each}  <!-- END HACK TO RE-RENDER -->
     {/if}

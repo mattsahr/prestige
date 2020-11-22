@@ -16,6 +16,7 @@
     "compression": "^1.7.1",
     "eslint": "^7.7.0",
     "eslint-plugin-svelte3": "^2.7.3",
+    "howler": "^2.2.1",
     "lodash": "^4.17.20",
     "polka": "next",
     "sirv": "^1.0.0",
@@ -41,6 +42,7 @@
     "sapper": "^0.28.0",
     "svelte": "^3.17.3",
     "svelte-mui": "^0.3.3-4",
-    "svelte-preprocess": "^4.1.1"
+    "svelte-preprocess": "^4.1.1",
+    "svelte-range-slider-pips": "^1.5.0"
   }
 }

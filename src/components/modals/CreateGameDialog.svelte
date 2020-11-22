@@ -60,7 +60,7 @@
     .modal-controls-wrap {
         background: rgb(200, 90, 0);
         background-image: url('/images/textures/back-pattern.png');
-        margin: -12px;
+        margin: -8px;
         border-radius: 4px;
         padding: 32px;
         padding-top: max(32px, 4vh);
@@ -130,7 +130,7 @@
 
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { gStore, modalUX } from '../store/store.js';
+    import { gStore, modalUX } from '../../store/store.js';
 
     const dispatch = createEventDispatcher();
     const handlePlayOffline = () => dispatch('playOffline');

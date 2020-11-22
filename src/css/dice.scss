@@ -4,9 +4,23 @@
     width: 150px;
     height: 150px;
     perspective: 450px;
+    /*    
     &.active {
         box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.5);
     }
+    */
+}
+
+.dice-display.selected::before {
+    content: " ";
+    position: absolute;
+    width: 152px;
+    height: 10px;
+    background: rgb(0, 255, 0);
+    z-index: 100;
+    top: -22px;
+    left: 1px;
+    border-radius: 6px;
 }
 
 .dice {
@@ -35,6 +49,8 @@
     background-image:url('/images/textures/diagmonds-light.png');
 }
 
+/* =========== DICE ONE ============================= */
+
 .dice-one .face {
     border: 1px solid rgba(0, 220, 30, 0.2);
     background-color: rgba(0, 210, 20, 0.2);
@@ -55,11 +71,8 @@
         background-color: rgba(0, 210, 20, 0.02);
     }
 }
-.dice-one.inactive { transform: scale(0.6); } 
-.dice-two.inactive { transform: scale(0.6); } 
-.dice-three.inactive { transform: scale(0.6); } 
-.dice-four.inactive { transform: scale(0.6); } 
-.dice-five.inactive { transform: scale(0.6); } 
+
+/* =========== DICE ONE ============================= */
 
 .dice-two .face {
     border: 1px solid rgba(0, 0, 120, 0.2);
@@ -78,7 +91,8 @@
     }
 
     &.inactive .face {
-        background-color: rgba(0, 20, 210, 0.02);
+        background-color: rgba(0, 20, 210, 0.05);
+        background-image: none;
     }
 }
 
@@ -313,6 +327,18 @@
 }
 
 
+.inactive {
+    .top-pip-1,
+    .left-pip-1, .left-pip-2,
+    .front-pip-1, .front-pip-2, .front-pip-3,
+    .back-pip-1, .back-pip-2, .back-pip-3, .back-pip-4,
+    .right-pip-1, .right-pip-2, .right-pip-3, .right-pip-4, .right-pip-5,
+    .bottom-pip-1, .bottom-pip-2, .bottom-pip-3, .bottom-pip-4, .bottom-pip-5, .bottom-pip-6 {
+        opacity: 0.5;
+    }
+}
+
+
 /* ========== ANIMATIONS  ================== */
 
 .dice-idle {
@@ -356,13 +382,55 @@
   }
 }
 
-.show-top    { transform: translateZ(-75px) rotateX(-90deg); }
-.show-front  { transform: translateZ(-75px) rotateY(   0deg); }
-.show-right  { transform: translateZ(-75px) rotateY( -90deg); }
-.show-back   { transform: translateZ(-75px) rotateY(-180deg); }
-.show-left   { transform: translateZ(-75px) rotateY(  90deg); }
-.show-top    { transform: translateZ(-75px) rotateX( -90deg); }
-.show-bottom { transform: translateZ(-75px) rotateX(  90deg); }
+.show-top    { transform: translateZ(-75px) rotateX(-90deg); 
+    .face.face-top { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+.show-front  { transform: translateZ(-75px) rotateY(   0deg); 
+    .face.face-front { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+.show-right  { transform: translateZ(-75px) rotateY( -90deg);  
+    .face.face-right { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+.show-back   { transform: translateZ(-75px) rotateY(-180deg);  
+    .face.face-back { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+.show-left   { transform: translateZ(-75px) rotateY(  90deg);  
+    .face.face-left { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+.show-bottom { transform: translateZ(-75px) rotateX(  90deg);  
+    .face.face-bottom { box-shadow: 10px 6px 6px rgba(0, 0, 0, 0.4); }
+}
+
+.inactive.show-top    { 
+    transform: translateZ(-195px) rotateX(-90deg); 
+    .face.face-bottom { opacity: 0.2; }
+    .face.face-top { box-shadow: none; }
+}
+.inactive.show-front  { 
+    transform: translateZ(-195px) rotateY(   0deg); 
+    .face.face-back { opacity: 0.2; }
+    .face.face-front { box-shadow: none; }
+}
+.inactive.show-right  { 
+    transform: translateZ(-195px) rotateY( -90deg); 
+    .face.face-left { opacity: 0.2; }
+    .face.face-right { box-shadow: none; }
+}
+.inactive.show-back   { 
+    transform: translateZ(-195px) rotateY(-180deg); 
+    .face.face-front { opacity: 0.2; }
+    .face.face-back { box-shadow: none; }
+}
+.inactive.show-left   { 
+    transform: translateZ(-195px) rotateY(  90deg); 
+    .face.face-right { opacity: 0.2; }
+    .face.face-left { box-shadow: none; }
+}
+.inactive.show-bottom { 
+    transform: translateZ(-195px) rotateX(  90deg); 
+    .face.face-top { opacity: 0.2; }
+    .face.face-bottom { box-shadow: none; }
+}
 
 
 /* ================ TOOLTIPS ================================= */

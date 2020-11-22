@@ -145,7 +145,7 @@
         flex-wrap: wrap;
         background: rgb(200, 90, 0);
         background-image: url('/images/textures/back-pattern.png');
-        margin: -12px;
+        margin: -8px;
         border-radius: 4px;
         padding: 32px;
         padding-top: max(32px, 4vh);
@@ -277,7 +277,6 @@
 
     const handlePlayerName = () => {
         deFocus();
-        console.log('playerName!', playerName, cityName, currentRosterName);
         if (header && playerName && cityName && currentRosterName) { 
             gStore.player.updateLocal(playerName, cityName, currentRosterName); 
         }
@@ -285,7 +284,6 @@
 
     const handleCityName = () => {
         deFocus();
-        console.log('cityName!', playerName, cityName, currentRosterName);
         if (header && playerName && cityName && currentRosterName) { 
            gStore.player.updateLocal(playerName, cityName, currentRosterName); 
         }
@@ -293,14 +291,12 @@
 
     const handleRosterName = () => {
         deFocus();
-        console.log('currentRosterName!', playerName, cityName, currentRosterName);
         if (header && playerName && cityName && currentRosterName) { 
            gStore.player.updateLocal(playerName, cityName, currentRosterName); 
         }
     };
 
     const handleGameInit = () => {
-        console.log('game Init!', playerName, cityName, currentRosterName);
         if (playerName && cityName && currentRosterName) { 
             gStore.player.updateLocal(playerName, cityName, currentRosterName);
         }
@@ -312,7 +308,6 @@
     };
 
     const handleMenuClick = () => {
-        console.log('menu button clicked!');
         adminUX.toggleDrawer();
     };
 

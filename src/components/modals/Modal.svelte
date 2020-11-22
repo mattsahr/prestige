@@ -5,9 +5,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(150, 190, 210, 0.8);
+        background-color: rgba(0, 0, 0, 0.5);
         background-image: url('/images/textures/billie-holiday.png');
-         /* rgba(60, 66, 70, 0.9); */
         z-index: 1999;
     }
 
@@ -18,9 +17,9 @@
         width: 96vw;
         max-width: 480px;
         max-height: 90vh;
-        overflow: auto;
+        overflow: hidden;
         transform: translate(-50%,-50%);
-        padding: 12px;
+        padding: 8px;
         border-radius: 4px;
         background: white;
         z-index: 2001;

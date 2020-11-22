@@ -59,22 +59,22 @@
 </style>
 
 <script>
-    import { gStore } from '../../store/store';
-    import MdMore from 'svelte-icons/md/MdMore.svelte';
+    import { modalUX } from '../../store/store';
+    import IoMdRefreshCircle from 'svelte-icons/io/IoMdRefreshCircle.svelte';
 
     export let handleDrawerClose = () => false;
 
-    const handleNextClick = () => {
-        gStore.roster.advanceTurn();
+    const handleResetClick = () => {
+        modalUX.showConfirmGameRosterReset();
         handleDrawerClose();
     };
 
 </script>
 
 
-<div class="drawer-button" on:click={handleNextClick}>
-    <div class="title">Next Turn <span class="tagline">roll the dice!</span></div>
+<div class="drawer-button" on:click={handleResetClick}>
+    <div class="title">Reset Game <span class="tagline">(GLOBAL RESET)</span></div>
     <div class="next-icon">
-        <MdMore />
+        <IoMdRefreshCircle />
     </div>
 </div>

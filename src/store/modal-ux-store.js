@@ -16,6 +16,7 @@ const createModalStore = () => {
         warnNameChange: { show: false },
         exitGame: { show: false },
         confirmPlayerRemove: { show: false },
+        confirmGameRosterReset: { show: false },
         viewTurns: { show: false },
         viewRules: { show: false },
         turnState: { show: false }
@@ -38,6 +39,7 @@ const createModalStore = () => {
         updated.initPlayer.show = false;
         updated.createGame.show = false;
         updated.chooseGoals.show = false;
+        updated.confirmGameRosterReset.show = false;
         set(updated);
     };
 
@@ -51,13 +53,29 @@ const createModalStore = () => {
         set(updated);
     };
 
-    const chooseGoals = (rosterName) => {
+    const showConfirmGameRosterReset = () => {
+        const updated = _cloneDeep(UX);
+        updated.confirmGameRosterReset = {
+            show: true
+        };
+        set(updated);
+    };
+
+    const chooseGoals = (rosterName, option) => {
         const updated = _cloneDeep(UX);
         updated.initPlayer.show = false;
         updated.createGame.show = false;
+        updated.confirmGameRosterReset.show = false;
 
         updated.chooseGoals.show = true;
-        updated.chooseGoals.rosterName = rosterName;
+
+        if (option  === 'resetCurrentGame') {
+            updated.chooseGoals.resetCurrentGame = true;
+        }
+        if (rosterName) {
+            updated.chooseGoals.rosterName = rosterName;
+        }
+
         set(updated);
     };
 
@@ -83,13 +101,12 @@ const createModalStore = () => {
             rolls[DICE_ORDER[index]] = roll;
         });
 
-        const turnCount = turns.played.length;
-        const show = era.showDescription;
+        const turnCount = turns.played.length - 1;
+        const show = true; // era.showDescription;
         return { era, rolls, show, turnCount };
     };
 
     const notifyTurn = turns => {
-        console.error('modalUX TURN', turns);
         const updated = _cloneDeep(UX);
         updated.turnState = { ...getLatestTurn(turns) };
         set(updated);
@@ -111,6 +128,7 @@ const createModalStore = () => {
     return {
         closeRosterModals,
         showConfirmPlayerRemove,
+        showConfirmGameRosterReset,
         chooseGoals,
         alertExit,
         showTurnOverview,

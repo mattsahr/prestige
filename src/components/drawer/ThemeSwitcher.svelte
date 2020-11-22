@@ -7,7 +7,7 @@
 
     const themeOptions = {
         'Default': 'theme-default',
-        'Theme B': 'theme-B'
+        'Roads': 'theme-roads'
     };
 
     const handleClick = e => {

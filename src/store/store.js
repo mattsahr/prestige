@@ -10,6 +10,7 @@ import {
     STARTING_SCORE 
 } from '../utility/constants';
 import modalUXStore from './modal-ux-store';
+import dashboardUXStore from './dashboard-ux-store';
 import { 
     composeBaseGameState, 
     boardState, 
@@ -25,6 +26,7 @@ import { get as storeGet } from 'svelte/store';
 import network from '../utility/network';
 
 export const modalUX = modalUXStore;
+export const dashboardUX = dashboardUXStore;
 
 const createGameStore = () => {
     const { subscribe, set, update } = writable({});
@@ -141,7 +143,7 @@ const createGameStore = () => {
                         : 0;
                     const networkTurns = networkRosterState.turns.played.length;
 
-                    return networkTurns > localTurns ? localTurns : false;
+                    return networkTurns > localTurns;
                 };
 
                 return (networkRosterState) => {
@@ -154,6 +156,10 @@ const createGameStore = () => {
                         return;
                     }
                     const turnAdvanced = checkTurnAdvanced(networkRosterState);
+
+                    console.log('ROSTER UPDATE advanced?', turnAdvanced);
+                    console.log('networkRosterState', networkRosterState);
+                    console.log('gameState', gameState);
 
                     gameState.networkRosterState = _cloneDeep(networkRosterState);
                     gameState.rosterName = networkRosterState.name;
@@ -169,7 +175,9 @@ const createGameStore = () => {
                     updateGame();
 
                     if (turnAdvanced) {
-                        modalUX.notifyTurn(gameState.turns);
+                        // modalUX.notifyTurn(gameState.turns);
+                        console.log('turnAdvanced, dashboard.notify (gameState)', gameState);
+                        dashboardUX.notifyTurn(gameState, 'turnAdvanced');
                     }
                 };
             })()
@@ -191,6 +199,10 @@ const createGameStore = () => {
                 }
 
                 SCORE.update(board._id);
+
+                if (!priorBoard) {
+                    dashboardUX.notifyTurn(gameState);
+                }
                 updateGame();
             }
         },
@@ -275,12 +287,12 @@ const createGameStore = () => {
                 // network.roster.update(roster, localPlayer); 
             },
 
-            resetAllBoads: gameState => {
+            resetAllBoards: gameState => {
                 for (const board of gameState.boards) {
                     network.board.update({
                         _id: board._id,
                         bonus: 0,
-                        state: boardState.composeNewBoard()
+                        state: composeNewBoard()
                     });
                 }                
             },
@@ -399,20 +411,34 @@ const createGameStore = () => {
     };
 
     const ROSTER = {
-        reset: option => {
-            for (const key of Object.keys(gameState.scores)) {
-                gameState.scores[key] = {...ZERO_SCORE};
-            }
+        resetAll: option => {
+            // for (const key of Object.keys(gameState.scores)) {
+            //     gameState.scores[key] = {...ZERO_SCORE};
+            // }
 
-            for (const board of gameState.boards) {
-                delete board.state;
-            }
+            // for (const board of gameState.boards) {
+            //     delete board.state;
+            // }
 
-            updateGame();
+
+            // updateGame();
+
+
+            console.group('resetAll');
+            console.log(gameState);
+            console.groupEnd();
+
+            modalUX.closeRosterModals();
 
             if (option !== NETWORK.FROM_NETWORK) {
+
+                const rosterData = _cloneDeep(gameState.networkRosterState);
+                gameState.turns = rosterData.turns = updateTurns(); // NEW DECK, FROM ZERO
+
                 sendToNetwork.roster.resetAllBoards(gameState);
+                sendToNetwork.roster.update(rosterData);
             }
+
         },
         join: rosterName => {
             if (gameState.rosterName !== rosterName) {
@@ -531,7 +557,7 @@ const createGameStore = () => {
 
                 updateGame();
 
-                console.group('addPlayer');
+                console.groupCollapsed('addPlayer');
                 console.log('playerId', player._id);
                 console.log('playerName', playerName);
                 console.log('board', gameState.boards.find(board => board._id === player._id));
@@ -629,7 +655,10 @@ export const rosterName = derived(
     gStore => gStore.rosterName
 );
 
-
+export const localPlayerIsAdmin = derived (
+    gStore,
+    gStore => (gStore.rosterAdminId === gStore.___localPlayerId)
+);
 
 export const localBoard = (() => {
 

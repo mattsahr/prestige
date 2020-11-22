@@ -189,8 +189,8 @@
             const theme = window.Cookies.get('theme');
             console.log('COOKIES: GOT A THEME!', theme);
 
-            if (theme && theme !== 'theme-default') {
-                document.body.classList.add('theme-B');
+            if (theme === 'theme-roads') {
+                document.body.classList.add('theme-roads');
             }
         }
     };

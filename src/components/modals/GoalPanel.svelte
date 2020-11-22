@@ -128,8 +128,8 @@
     import { ExpansionPanel  } from 'svelte-mui/src';
     import GoArrowRight from 'svelte-icons/go/GoArrowRight.svelte';
     import MdRefresh from 'svelte-icons/md/MdRefresh.svelte';
-    import { goals, gStore, modalUX } from '../store/store';
-    import { hydrateGoals } from '../utility/helpers';
+    import { goals, gStore, modalUX } from '../../store/store';
+    import { hydrateGoals } from '../../utility/helpers';
 
     export let main = false;
     export let modal = false;
@@ -144,7 +144,12 @@
     const getRandomGoals = () => gStore.goals.generateRandom();
 
     const handleCreateGame = () => {
-        gStore.roster.create($modalUX.chooseGoals.rosterName);
+        if ($modalUX.chooseGoals.resetCurrentGame) {
+            console.log('Goals Panel -- resetCurrentGame!');
+            gStore.roster.resetAll($modalUX.chooseGoals.rosterName);
+        } else {
+            gStore.roster.create($modalUX.chooseGoals.rosterName);
+        }
 
     };
 

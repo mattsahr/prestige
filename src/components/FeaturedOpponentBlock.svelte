@@ -114,7 +114,6 @@
 
 <script>
     import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
     import MdClose from 'svelte-icons/md/MdClose.svelte';
     import MdChevronLeft from 'svelte-icons/md/MdChevronLeft.svelte';
     import MdChevronRight from 'svelte-icons/md/MdChevronRight.svelte';
